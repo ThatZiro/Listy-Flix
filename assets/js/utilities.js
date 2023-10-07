@@ -15,7 +15,8 @@ async function GetApiJson(requestUrl, options) {
       );
     }
 
-    console.log(`Successfully fetched api at ${requestUrl}`);
+    if (utilities_Logs)
+      console.log(`Successfully fetched api at ${requestUrl}`);
     return await response.json();
   } catch (error) {
     console.error(error.message);
@@ -70,4 +71,42 @@ function SetData(item, data) {
   let jsonData = JSON.stringify(data);
   localStorage.setItem(item, jsonData);
   console.log("Data Saved to Local Storage");
+}
+//=============================================================================================================
+/**
+ * Selects the most frequent items from an array and breaks ties randomly.
+ * @param {Array} array - The input array containing items.
+ * @param {number} count - The number of most frequent items to select.
+ * @returns {Array} - An array containing the selected most frequent items.
+ */
+function GetMostFrequent(array, count) {
+  let counts = {};
+  array.forEach((item) => {
+    let key = item.toString();
+    counts[item] = (counts[key] || 0) + 1;
+  });
+
+  let itemCountsArray = Object.entries(counts).map(([item, count]) => ({
+    item,
+    count,
+  }));
+  itemCountsArray.sort((a, b) => b.count - a.count);
+
+  let returnItems = [];
+
+  for (let i = 0; i < count - 1; i++) {
+    returnItems.push(itemCountsArray.shift());
+  }
+
+  let highestItem = [];
+
+  for (const item of itemCountsArray) {
+    if (item.count === itemCountsArray[0].count) {
+      highestItem.push(item);
+    }
+  }
+
+  returnItems.push(highestItem[Math.floor(Math.random() * highestItem.length)]);
+
+  return returnItems.map((item) => item.item);
 }
