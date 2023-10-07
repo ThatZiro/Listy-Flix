@@ -1,16 +1,97 @@
-const omdbKey = "git ";
+//===============================================================================
+//================================= Variables ===================================
+//===============================================================================
+//Remove Debug Messages
+const utilities_Logs = false;
 
-let input = "deadpool";
+//OMBD Key if we decide to use it
+const OMBD_Key = "eee9ecb3";
 
+//TMDB Variables for queries
+const TMDB_key = "337061be9657573ece2ab40bc5cb0965";
+const TMDB_url = "https://api.themoviedb.org/3";
+const TMDB_movieEndpoint = "/search/movie";
+const TMDB_actorEndpoint = "/search/person";
+const TMDB_discoverEndpoint = "/discover/movie";
+const TMDB_multiSearchEndpoint = "/search/multi";
+
+//Temporary inputs for testing
+let library = ["293660", "238", "13", "278", "118340"]; // Temp Library
+let ourInput = "deadpool"; // Temp Input
+
+//Our options used for fetching data from APIS
+const ourOptions = {
+  method: "GET",
+  cache: "reload",
+};
+
+//===============================================================================
+//=============================== Running Logic =================================
+//===============================================================================
+
+//Run when the document is done loading
 $(document).ready(function () {
   console.log("Document Ready!");
 
-  let url = `http://www.omdbapi.com/?apikey=${omdbKey}&t=${input}`;
-  let ourOptions = {
-    method: "GET",
-    cache: "reload",
-  };
-  GetApiJson(url, ourOptions).then((jsonData) => {
-    console.log(jsonData);
+  // Testing input query > Returned 7 results of "deadpool" we can use to populate page
+  QueryResults(ourInput).then((result) => {
+    console.log(result);
   });
+
+  GetRecommendations(); // Testing Getting Recommendations
 });
+
+//===============================================================================
+//================================= Functions ===================================
+//===============================================================================
+
+//This function queries the database for search results based on users input
+//Input users search
+//returns an array of relative results
+async function QueryResults(input) {
+  let url = `${TMDB_url}${TMDB_movieEndpoint}?api_key=${TMDB_key}&query=${input}`;
+  try {
+    const jsonData = await GetApiJson(url, ourOptions);
+    return jsonData;
+  } catch (error) {
+    // Handle errors here, such as network issues or invalid input
+    console.error("Error:", error);
+    throw error;
+  }
+}
+
+//This function is used to get our recommendations
+//Input How many movies we want to get
+//returns a random array of movieData
+async function GetRecommendations(movies) {
+  let genres = [];
+  let actors = [];
+
+  //Gets Movies and adds there genres to genres array
+  const apiPromisesMovie = library.map((movie) => {
+    let movieUrl = `${TMDB_url}/movie/${movie}?api_key=${TMDB_key}`;
+    return GetApiJson(movieUrl, ourOptions).then((jsonData) => {
+      jsonData.genres.forEach((element) => {
+        genres.push(element.id);
+      });
+    });
+  });
+
+  //Gets Movie Credits and adds the cast to actors array
+  const apiPromisesActor = library.map((movie) => {
+    let actorUrl = `${TMDB_url}/movie/${movie}/credits?api_key=${TMDB_key}`;
+    return GetApiJson(actorUrl, ourOptions).then((jsonData) => {
+      jsonData.cast.forEach((element) => {
+        actors.push(element.name);
+      });
+    });
+  });
+
+  await Promise.all(apiPromisesMovie);
+  await Promise.all(apiPromisesActor);
+
+  //Get top x amount of each genre and actors
+  console.log(GetMostFrequent(genres, 5));
+  console.log(GetMostFrequent(actors, 5));
+  //TODO Add functionality to get movie list based on genres and actors
+}
