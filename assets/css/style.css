@@ -14,9 +14,8 @@
 body {
     background: linear-gradient(#505050, #2E2E2E);
 }
-.text-secondary {
-    color: var(--secondary);
-}
+.text-primary { color: var(--primary);}
+.text-secondary {color: var(--secondary);}
 /* ================ Header ====================== */
 
 .lib {
