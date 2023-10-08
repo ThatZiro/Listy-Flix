@@ -31,21 +31,26 @@ const ourOptions = {
 
 //Run when the document is done loading
 $(document).ready(function () {
+  //WHEN search field is updated Update Search drop down
+  $("#search-input").on("input", UpdateSearch);
   console.log("Document Ready!");
-
-  // Testing input query > Returned 7 results of "deadpool" we can use to populate page
-  QueryResults(ourInput).then((result) => {
-    console.log(result);
-  });
-
-  GetRecommendations(); // Testing Getting Recommendations
 });
 
 //===============================================================================
 //================================= Functions ===================================
 //===============================================================================
 
-//This function queries the database for search results based on users input
+//This function queries the database and sorts the results based on relativity
+//Input users search
+//returns an array of relative results
+function UpdateSearch(e) {
+  QueryResults($(this).val()).then((result) => {
+    SortArrayByReletivity;
+    console.log(result);
+  });
+}
+
+//This function queries the database for search results based on passed input
 //Input users search
 //returns an array of relative results
 async function QueryResults(input) {
