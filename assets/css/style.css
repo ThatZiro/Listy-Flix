@@ -1,0 +1,39 @@
+:root {
+--text: #ffffff;
+--background: #000000;
+--primary: #ff5e00;
+--secondary: #d8e4db;
+--accent: #2450ff;
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(#505050, #2E2E2E);
+}
+.text-secondary {
+    color: var(--secondary);
+}
+/* ================ Header ====================== */
+
+.lib {
+    color: var(--text);
+}
+
+.lib:hover {
+    color: var(--primary);
+}
+
+/* =================  ======================== */
+
+#search-input {
+    border-radius: 10px;
+}
+
+#search-input:focus {
+    border: none;
+}
+
