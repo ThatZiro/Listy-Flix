@@ -17,7 +17,7 @@ const TMDB_multiSearchEndpoint = "/search/multi";
 
 //Temporary inputs for testing
 let library = ["293660", "238", "13", "278", "118340"]; // Temp Library
-let ourInput = "deadpool"; // Temp Input
+let ourInput = "the last airbender"; // Temp Input
 
 //Our options used for fetching data from APIS
 const ourOptions = {
@@ -31,21 +31,77 @@ const ourOptions = {
 
 //Run when the document is done loading
 $(document).ready(function () {
+  //WHEN search field is updated Update Search drop down
+  $("#search-input").on("input", UpdateSearch);
   console.log("Document Ready!");
-
-  // Testing input query > Returned 7 results of "deadpool" we can use to populate page
-  QueryResults(ourInput).then((result) => {
-    console.log(result);
-  });
-
-  GetRecommendations(); // Testing Getting Recommendations
 });
 
 //===============================================================================
 //================================= Functions ===================================
 //===============================================================================
 
-//This function queries the database for search results based on users input
+//This function queries the database and sorts the results based on relativity
+//Input users search
+function UpdateSearch(e) {
+  QueryResults($(this).val()).then((result) => {
+    console.log(result);
+    UpdateDropdown(result.results, 10, $(this).val());
+  });
+}
+
+//This function takes the array of movie results and displays them under the movie search bar
+//Input array of movie results and number of results to display
+function UpdateDropdown(Results, ResultsToDisplay, input) {
+  //backdrop_path can access the image backdrop
+  const posterUrl = `https://image.tmdb.org/t/p/original/`;
+  $("#autoFillDiv").empty();
+  for (let i = 0; i < ResultsToDisplay; i++) {
+    if (i >= Results.length) {
+      return;
+    }
+    let dropdownItem = $("<div>", {
+      class: "bg-white border rounded autoFill p-1 text-gray-600 text-xl",
+    })
+      .append(
+        $("<img>", {
+          src: `${posterUrl}${Results[i].poster_path}`, //TODO Null Check
+          alt: "",
+          class: "h-12 inline",
+          id: "poster",
+        })
+      )
+      .append(
+        $("<p>", {
+          html: ` ${HighlightInput(Results[i].title, input)}`,
+          class: "inline",
+          id: "title",
+        })
+      )
+      .append(
+        $("<p>", {
+          text: ` (${Results[i].release_date.split("-")[0]})`,
+          class: "inline",
+          id: "year",
+        })
+      );
+
+    $("#autoFillDiv").append(dropdownItem);
+  }
+}
+
+function HighlightInput(text, input) {
+  // Use a regular expression to find all occurrences of the substring in the main string
+  const regex = new RegExp(input, "gi");
+
+  // Replace all occurrences of the substring with the wrapped version
+  const highlightedString = text.replace(
+    regex,
+    `<span class="highlight">$&</span>`
+  );
+
+  return highlightedString;
+}
+//This function queries the database for search results based on passed input
 //Input users search
 //returns an array of relative results
 async function QueryResults(input) {
