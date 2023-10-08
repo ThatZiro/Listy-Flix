@@ -45,13 +45,13 @@ $(document).ready(function () {
 function UpdateSearch(e) {
   QueryResults($(this).val()).then((result) => {
     console.log(result);
-    UpdateDropdown(result.results, 10);
+    UpdateDropdown(result.results, 10, $(this).val());
   });
 }
 
 //This function takes the array of movie results and displays them under the movie search bar
 //Input array of movie results and number of results to display
-function UpdateDropdown(Results, ResultsToDisplay) {
+function UpdateDropdown(Results, ResultsToDisplay, input) {
   //backdrop_path can access the image backdrop
   const posterUrl = `https://image.tmdb.org/t/p/original/`;
   $("#autoFillDiv").empty();
@@ -72,7 +72,7 @@ function UpdateDropdown(Results, ResultsToDisplay) {
       )
       .append(
         $("<p>", {
-          text: ` ${Results[i].original_title}`,
+          html: ` ${HighlightInput(Results[i].title, input)}`,
           class: "inline",
           id: "title",
         })
@@ -89,6 +89,18 @@ function UpdateDropdown(Results, ResultsToDisplay) {
   }
 }
 
+function HighlightInput(text, input) {
+  // Use a regular expression to find all occurrences of the substring in the main string
+  const regex = new RegExp(input, "gi");
+
+  // Replace all occurrences of the substring with the wrapped version
+  const highlightedString = text.replace(
+    regex,
+    `<span class="highlight">$&</span>`
+  );
+
+  return highlightedString;
+}
 //This function queries the database for search results based on passed input
 //Input users search
 //returns an array of relative results

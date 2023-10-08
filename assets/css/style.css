@@ -1,43 +1,50 @@
 :root {
---text: #ffffff;
---background: #000000;
---primary: #ff5e00;
---secondary: #d8e4db;
---accent: #2450ff;
+  --text: #ffffff;
+  --background: #000000;
+  --primary: #ff5e00;
+  --secondary: #d8e4db;
+  --accent: #2450ff;
 }
 
-
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    background: linear-gradient(#505050, #2E2E2E);
+  background: linear-gradient(#505050, #2e2e2e);
 }
-.text-primary {color: var(--primary);}
-.text-secondary {color: var(--secondary);}
+.text-primary {
+  color: var(--primary);
+}
+.text-secondary {
+  color: var(--secondary);
+}
 /* ================ Header ====================== */
 
 .lib {
-    color: var(--text);
+  color: var(--text);
 }
 
 .lib:hover {
-    color: var(--primary);
+  color: var(--primary);
 }
 
 /* =================  ======================== */
 
 #search-input {
-    border-radius: 10px;
+  border-radius: 10px;
 }
 
 #search-input:focus {
-    outline: none;
+  outline: none;
 }
 
 .autoFill:hover {
-    background-color: var(--secondary);
-    cursor: pointer;
-    color: black;
+  background-color: var(--secondary);
+  cursor: pointer;
+  color: black;
+}
+/* Highlight Input in Searchbar */
+.highlight {
+  color: var(--accent);
 }
