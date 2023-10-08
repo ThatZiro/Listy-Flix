@@ -14,7 +14,7 @@
 body {
     background: linear-gradient(#505050, #2E2E2E);
 }
-.text-primary { color: var(--primary);}
+.text-primary {color: var(--primary);}
 .text-secondary {color: var(--secondary);}
 /* ================ Header ====================== */
 
@@ -33,6 +33,6 @@ body {
 }
 
 #search-input:focus {
-    border: none;
+    outline: none;
 }
 
