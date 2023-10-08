@@ -36,3 +36,8 @@ body {
     outline: none;
 }
 
+.autoFill:hover {
+    background-color: var(--secondary);
+    cursor: pointer;
+    color: black;
+}
