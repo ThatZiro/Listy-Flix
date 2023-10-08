@@ -17,7 +17,7 @@ const TMDB_multiSearchEndpoint = "/search/multi";
 
 //Temporary inputs for testing
 let library = ["293660", "238", "13", "278", "118340"]; // Temp Library
-let ourInput = "deadpool"; // Temp Input
+let ourInput = "the last airbender"; // Temp Input
 
 //Our options used for fetching data from APIS
 const ourOptions = {
@@ -42,12 +42,51 @@ $(document).ready(function () {
 
 //This function queries the database and sorts the results based on relativity
 //Input users search
-//returns an array of relative results
 function UpdateSearch(e) {
   QueryResults($(this).val()).then((result) => {
-    SortArrayByReletivity;
     console.log(result);
+    UpdateDropdown(result.results, 10);
   });
+}
+
+//This function takes the array of movie results and displays them under the movie search bar
+//Input array of movie results and number of results to display
+function UpdateDropdown(Results, ResultsToDisplay) {
+  //backdrop_path can access the image backdrop
+  const posterUrl = `https://image.tmdb.org/t/p/original/`;
+  $("#autoFillDiv").empty();
+  for (let i = 0; i < ResultsToDisplay; i++) {
+    if (i >= Results.length) {
+      return;
+    }
+    let dropdownItem = $("<div>", {
+      class: "bg-white border rounded autoFill p-1 text-gray-600 text-xl",
+    })
+      .append(
+        $("<img>", {
+          src: `${posterUrl}${Results[i].poster_path}`, //TODO Null Check
+          alt: "",
+          class: "h-12 inline",
+          id: "poster",
+        })
+      )
+      .append(
+        $("<p>", {
+          text: ` ${Results[i].original_title}`,
+          class: "inline",
+          id: "title",
+        })
+      )
+      .append(
+        $("<p>", {
+          text: ` (${Results[i].release_date.split("-")[0]})`,
+          class: "inline",
+          id: "year",
+        })
+      );
+
+    $("#autoFillDiv").append(dropdownItem);
+  }
 }
 
 //This function queries the database for search results based on passed input
