@@ -156,6 +156,16 @@ async function GetRecommendations(movies) {
   //TODO Add functionality to get movie list based on genres and actors
 }
 
+/*
+var splide = new Splide( '.splide', {
+  type   : 'loop',
+  perPage: 3,
+  focus  : 'center',
+} );
+
+splide.mount();
+*/
+
 function LoadMoviePage(e) {
   console.log(`Clicked movie ${$(this).attr('id')}`);
 }
