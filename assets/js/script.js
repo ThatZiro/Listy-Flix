@@ -151,3 +151,13 @@ async function GetRecommendations(movies) {
   console.log(GetMostFrequent(actors, 5));
   //TODO Add functionality to get movie list based on genres and actors
 }
+
+/*
+var splide = new Splide( '.splide', {
+  type   : 'loop',
+  perPage: 3,
+  focus  : 'center',
+} );
+
+splide.mount();
+*/
