@@ -2,7 +2,7 @@
   --text: #ffffff;
   --background: #000000;
   --primary: #ff5e00;
-  --secondary: #d8e4db;
+  --secondary: #BDBDBD;
   --accent: #2450ff;
 }
 
@@ -11,11 +11,12 @@
 }
 
 body {
-  background: linear-gradient(#505050, #2e2e2e);
+  background: linear-gradient(#2C2C2C, #1C1C1C);
 }
 .text-primary {
   color: var(--primary);
 }
+.bg-primary {background-color: var(--primary);}
 .text-secondary {
   color: var(--secondary);
 }
@@ -31,12 +32,13 @@ body {
 
 /* =================  ======================== */
 
-#search-input {
-  border-radius: 10px;
-}
-
-#search-input:focus {
-  outline: none;
+.backdrop {
+  background: linear-gradient(
+  rgba(0,0,0,.8),
+  rgba(0,0,0,.8)),
+  url(../images/blade_runner_2049_backdrop.png);
+  background-position: center;
+  background-size: cover;
 }
 
 .autoFill:hover {
@@ -47,4 +49,12 @@ body {
 /* Highlight Input in Searchbar */
 .highlight {
   color: var(--accent);
+}
+
+#search-input {
+  border-radius: 10px;
+}
+
+#search-input:focus {
+  outline: none;
 }
