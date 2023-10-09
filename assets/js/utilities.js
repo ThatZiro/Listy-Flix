@@ -110,3 +110,14 @@ function GetMostFrequent(array, count) {
 
   return returnItems.map((item) => item.item);
 }
+
+function SortArrayByReletivity(array, input) {
+  for (const item of array) {
+    let weight = 0;
+    for (const char of input) {
+      let location = item.indexOf(char) + 1;
+      weight += location;
+    }
+    console.log(item + " | " + weight);
+  }
+}
