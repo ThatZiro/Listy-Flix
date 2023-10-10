@@ -41,12 +41,13 @@ body {
   background-size: cover;
 }
 
+/* Highlight Input in Searchbar & hover effect */
 .autoFill:hover {
   background-color: var(--secondary);
   cursor: pointer;
   color: black;
 }
-/* Highlight Input in Searchbar */
+
 .highlight {
   color: var(--accent);
 }
@@ -57,4 +58,14 @@ body {
 
 #search-input:focus {
   outline: none;
+}
+
+/* Carousel */
+.movie-cards {
+  background-position: center;
+  background-size: cover;
+}
+
+.blade-runner {
+  background-image: url(../images/balde-runner.png);
 }

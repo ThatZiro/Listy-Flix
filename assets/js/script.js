@@ -152,7 +152,7 @@ async function GetRecommendations(movies) {
   //TODO Add functionality to get movie list based on genres and actors
 }
 
-/*
+
 var splide = new Splide( '.splide', {
   type   : 'loop',
   perPage: 3,
@@ -160,4 +160,3 @@ var splide = new Splide( '.splide', {
 } );
 
 splide.mount();
-*/
