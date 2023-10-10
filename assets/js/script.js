@@ -156,10 +156,26 @@ async function GetRecommendations(movies) {
   //TODO Add functionality to get movie list based on genres and actors
 }
 
-
 function LoadMoviePage(e) {
   console.log(`Clicked movie ${$(this).attr('id')}`);
+  let movieUrl = `${TMDB_url}/movie/${$(this).attr('id')}?api_key=${TMDB_key}`;
+  return GetApiJson(movieUrl, ourOptions).then((jsonData) => {
+    console.log(jsonData);  //Main Object
+    console.log(jsonData.title) //Movie Title
+    console.log(jsonData.release_date) //Release Date
+    console.log(jsonData.vote_average) //Vote Average
+    console.log(jsonData.vote_count) //Vote Count
+    console.log(jsonData.runtime) //runtime of movie
+    console.log(jsonData.genres_ids) //genre of movie - multiple genres
+    console.log(jsonData.tagline) //tag line above description of movie
+    console.log(jsonData.overview) // overview of the movie (description)
+    // console.log(jsonData.director) //director
+    // console.log(jsonData.featuring) //featuring
+
+
+  });
 }
+
 
 var splide = new Splide( '.splide', {
   type   : 'loop',
