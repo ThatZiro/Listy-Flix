@@ -171,9 +171,18 @@ function LoadMoviePage(e) {
       .catch((error) => {
         console.error('Error:', error);
       });
-    console.log(
-      '======================================================================='
-    );
+    
+    console.log(jsonData);  //Main Object
+    console.log(jsonData.title) //Movie Title
+    console.log(jsonData.release_date) //Release Date
+    console.log(jsonData.vote_average) //Vote Average
+    console.log(jsonData.vote_count) //Vote Count
+    console.log(jsonData.runtime) //runtime of movie
+    console.log(jsonData.genres_ids) //genre of movie - multiple genres
+    console.log(jsonData.tagline) //tag line above description of movie
+    console.log(jsonData.overview) // overview of the movie (description)
+    // console.log(jsonData.director) //director
+    // console.log(jsonData.featuring) //featuring
   });
 }
 
@@ -203,9 +212,8 @@ async function GetCertification(id) {
   }
 }
 
-//====== This is used to manipulte the Movies Slider on the Landing Page ===========
-var splide = new Splide('.splide', {
-  type: 'loop',
+var splide = new Splide( '.splide', {
+  type   : 'loop',
   perPage: 3,
   focus: 'center',
 });
