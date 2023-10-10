@@ -162,7 +162,11 @@ async function GetRecommendations(movies) {
 function LoadMoviePage(e) {
   console.log(`Clicked movie ${$(this).attr('id')}`);
   let movieUrl = `${TMDB_url}/movie/${$(this).attr('id')}?api_key=${TMDB_key}`;
+
+  ChangePage('movie', $(this).attr('id'));
+
   return GetApiJson(movieUrl, ourOptions).then((jsonData) => {
+    window.location;
     //Handle Certification
     GetCertification($(this).attr('id'))
       .then((certification) => {
@@ -171,19 +175,39 @@ function LoadMoviePage(e) {
       .catch((error) => {
         console.error('Error:', error);
       });
-    
-    console.log(jsonData);  //Main Object
-    console.log(jsonData.title) //Movie Title
-    console.log(jsonData.release_date) //Release Date
-    console.log(jsonData.vote_average) //Vote Average
-    console.log(jsonData.vote_count) //Vote Count
-    console.log(jsonData.runtime) //runtime of movie
-    console.log(jsonData.genres_ids) //genre of movie - multiple genres
-    console.log(jsonData.tagline) //tag line above description of movie
-    console.log(jsonData.overview) // overview of the movie (description)
+
+    console.log(jsonData); //Main Object
+    console.log(jsonData.title); //Movie Title
+    console.log(jsonData.release_date); //Release Date
+    console.log(jsonData.vote_average); //Vote Average
+    console.log(jsonData.vote_count); //Vote Count
+    console.log(jsonData.runtime); //runtime of movie
+    console.log(jsonData.genres); //genre of movie - multiple genres
+    console.log(jsonData.tagline); //tag line above description of movie
+    console.log(jsonData.overview); // overview of the movie (description)
     // console.log(jsonData.director) //director
     // console.log(jsonData.featuring) //featuring
   });
+}
+
+function ChangePage(page, ref) {
+  let newLocation = window.location.origin;
+  console.log(page);
+  switch (page) {
+    case 'home':
+      newLocation = window.location.origin;
+      break;
+    case 'movie': {
+      newLocation = `${window.location.origin}/pages/movie.html?ref=${ref}`;
+      break;
+    }
+    case 'library': {
+      newLocation = window.location.origin + `/pages/library.html`;
+      break;
+    }
+  }
+  console.log(newLocation);
+  window.location.href = newLocation;
 }
 
 //This function is used to get most recent movie certification from another fetch call
@@ -212,8 +236,8 @@ async function GetCertification(id) {
   }
 }
 
-var splide = new Splide( '.splide', {
-  type   : 'loop',
+var splide = new Splide('.splide', {
+  type: 'loop',
   perPage: 3,
   focus: 'center',
 });
