@@ -89,8 +89,8 @@ function UpdateDropdown(Results, ResultsToDisplay, input) {
       );
 
     $('#autoFillDiv').append(dropdownItem);
-    $(`.dropdownItem`).on('click', LoadMoviePage);
   }
+  $(`.dropdownItem`).on('click', LoadMoviePage);
 }
 
 function HighlightInput(text, input) {
@@ -156,15 +156,59 @@ async function GetRecommendations(movies) {
   //TODO Add functionality to get movie list based on genres and actors
 }
 
-
+//This function is used to get our recommendations
+//Input How many movies we want to get
+//returns a random array of movieData
 function LoadMoviePage(e) {
   console.log(`Clicked movie ${$(this).attr('id')}`);
+  let movieUrl = `${TMDB_url}/movie/${$(this).attr('id')}?api_key=${TMDB_key}`;
+  return GetApiJson(movieUrl, ourOptions).then((jsonData) => {
+    //Handle Certification
+    GetCertification($(this).attr('id'))
+      .then((certification) => {
+        console.log(certification.certification);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+    console.log(
+      '======================================================================='
+    );
+  });
 }
 
-var splide = new Splide( '.splide', {
-  type   : 'loop',
+//This function is used to get most recent movie certification from another fetch call
+//Input Movie ID
+//returns String containing most recent rating
+async function GetCertification(id) {
+  let certificationUrl = `${TMDB_url}/movie/${id}/release_dates?api_key=${TMDB_key}`;
+  // let url = `https://api.themoviedb.org/3/movie/335984/release_dates?api_key=337061be9657573ece2ab40bc5cb0965`;
+
+  try {
+    const certificationData = await GetApiJson(certificationUrl, ourOptions);
+    const usCertification = await certificationData.results.find(
+      (result) => result.iso_3166_1 === 'US'
+    );
+
+    if (usCertification && usCertification.release_dates.length > 0) {
+      const latestCertification =
+        usCertification.release_dates[usCertification.release_dates.length - 1];
+      return latestCertification;
+    } else {
+      return `Certification not avalible`;
+    }
+  } catch (error) {
+    console.error('Error fetching certification data:', error);
+    throw error;
+  }
+}
+
+//====== This is used to manipulte the Movies Slider on the Landing Page ===========
+var splide = new Splide('.splide', {
+  type: 'loop',
   perPage: 3,
-  focus  : 'center',
-} );
+  focus: 'center',
+});
 
 splide.mount();
+//==================================================================================
