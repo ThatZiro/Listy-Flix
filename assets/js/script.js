@@ -214,7 +214,7 @@ async function GetCertification(id) {
 
 var splide = new Splide( '.splide', {
   type   : 'loop',
-  perPage: 3,
+  perPage: 6,
   focus: 'center',
 });
 
