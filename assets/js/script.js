@@ -124,6 +124,7 @@ function LoadCarousel() {
 
     let movieA = $('<a></a>', {
       class: `flex justify-center`,
+      href: `./pages/movie.html?ref=${movie}`,
     });
 
     let movieImg = $('<img>', {
@@ -176,7 +177,6 @@ function UpdateDropdown(Results, ResultsToDisplay, input) {
       class:
         'dropdownItem bg-white border rounded autoFill p-1 text-gray-600 text-xl',
       id: Results[i].id,
-      href: `./pages/movie.html?ref=${Results[i].id}`,
     })
       .append(
         $('<img>', {
