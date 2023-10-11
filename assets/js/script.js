@@ -287,22 +287,20 @@ function LoadMoviePage(e) {
 //This function is used to change the page
 //Input page you want to go to and page refereance if we are going to the movie page else ref can be ""
 function ChangePage(page, ref) {
-  let newLocation = window.location.pathname.split('/');
-  newLocation.pop();
+  let oldLocation = window.location.pathname.split('/');
+  oldLocation.pop();
+  let newLocation;
+
   switch (page) {
-    case 'home':
-      newLocation = window.location.origin;
-      break;
     case 'movie': {
-      newLocation = `${newLocation}/pages/movie.html?ref=${ref}`;
+      newLocation = `${oldLocation.join('/')}/pages/movie.html?ref=${ref}`;
       break;
     }
     case 'library': {
-      newLocation = window.location.origin + `/pages/library.html`;
+      newLocation = `${oldLocation.join('/')}/pages/library.html`;
       break;
     }
   }
-  console.log(newLocation);
   window.location.href = newLocation;
 }
 
