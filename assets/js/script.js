@@ -39,6 +39,7 @@ let carouselMovieList = [
   '871',
 ];
 let splide;
+let search = '';
 
 splideCount = -1;
 
@@ -63,6 +64,7 @@ $(document).ready(function () {
   $('#search-input').on('input', UpdateSearch);
   LoadCarousel();
   $(window).on('resize', ScaleSplide);
+  $(`#autoFillDiv`).on('click', LoadMoviePage);
 });
 
 //===============================================================================
@@ -131,9 +133,19 @@ function LoadCarousel() {
 //This function queries the database and sorts the results based on relativity
 //Input users search
 function UpdateSearch(e) {
-  QueryResults($(this).val()).then((result) => {
+  var thisSearch = $(this).val();
+  search = thisSearch;
+  setTimeout(function () {
+    if (search == thisSearch) {
+      SearchBuffer();
+    }
+  }, 200);
+}
+
+function SearchBuffer() {
+  QueryResults(search).then((result) => {
     // console.log(result);
-    UpdateDropdown(result.results, 10, $(this).val());
+    UpdateDropdown(result.results, 5, result);
   });
 }
 
@@ -147,6 +159,13 @@ function UpdateDropdown(Results, ResultsToDisplay, input) {
     if (i >= Results.length) {
       return;
     }
+
+    let poster = `${posterUrl}${Results[i].poster_path}`;
+    if (Results[i].poster_path == null) {
+      poster = `./assets/images/stock-poster.png`;
+      console.log(poster);
+    }
+
     let dropdownItem = $('<div></div>', {
       class:
         'dropdownItem bg-white border rounded autoFill p-1 text-gray-600 text-xl',
@@ -154,7 +173,7 @@ function UpdateDropdown(Results, ResultsToDisplay, input) {
     })
       .append(
         $('<img>', {
-          src: `${posterUrl}${Results[i].poster_path}`, //TODO Null Check
+          src: poster, //TODO Null Check
           alt: '',
           // height: '100px',
           class: 'h-12 inline',
@@ -178,7 +197,6 @@ function UpdateDropdown(Results, ResultsToDisplay, input) {
 
     $('#autoFillDiv').append(dropdownItem);
   }
-  $(`.dropdownItem`).on('click', LoadMoviePage);
 }
 
 //This function hightlights the text in the dropdown menu based on your input
@@ -250,10 +268,13 @@ async function GetRecommendations(movies) {
 //Input How many movies we want to get
 //returns a random array of movieData
 function LoadMoviePage(e) {
-  console.log(`Clicked movie ${$(this).attr('id')}`);
-  let movieUrl = `${TMDB_url}/movie/${$(this).attr('id')}?api_key=${TMDB_key}`;
-
-  ChangePage('movie', $(this).attr('id'));
+  console.log($(e.target));
+  let item = $(e.target);
+  if (!$(e.target).hasClass('dropdownItem')) {
+    item = $(e.target).closest('.dropdownItem');
+  }
+  console.log(item.attr('id'));
+  ChangePage('movie', item.attr('id'));
 }
 
 //This function is used to change the page
@@ -315,7 +336,6 @@ function UpdateSlideBackground() {
   $('#backdrop').attr(
     'src',
     `${$(currentSlideElement).find('img').data('backdrop')}`
-      
   );
 }
 
