@@ -16,13 +16,14 @@
   <header class="w-full py-4 px-10">
     <a href="../index.html" class="inline-block text-4xl bold text-white inline-block">
       <img src="../assets/images/Logo.png" alt="" class="h-10">
-    <a href="../pages/library.html" class="lib float-right text-2xl">My Library</a>
+      <a href="../pages/library.html" class="lib float-right text-2xl">Watchlist</a>
   </header>
   <!-------------------------------------- Main --------------------------------------------->
   <main>
     <div class="flex sm:flex-row flex-col min-w-screen p-10">
-      <div class="sm:w-1/4 w-1/2 mx-auto"><img src="/assets/images/stock-poster.png" alt="" class="rounded-lg border mb-8" id="poster"></div>
-      <div class="sm:w-3/4 w-full">
+      <div class="sm:w-1/4 w-1/2 mx-auto"><img src="/assets/images/stock-poster.png" alt=""
+          class="rounded-lg border mb-8" id="poster"></div>
+      <div class="sm:w-3/4 w-full relative">
         <!-- Certification, Title, rating -->
         <div class="flex flex-wrap text-white items-center ml-6">
           <div class="xl:text-4xl md:text-2xl text-xl border p-1" id="certification"></div>
@@ -52,6 +53,14 @@
           <p></p>
           <p></p>
         </div>
+        <div class="ml-6 mt-10">
+          <button
+            class="text-white xl:text-2xl md:text-xl py-1 px-2 bg-primary opacity-75 hover:opacity-100 rounded-full"
+            id="addWatchlist">
+            + to Watchlist
+          </button>
+        </div>
+
       </div>
 
     </div>

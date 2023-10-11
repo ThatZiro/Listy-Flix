@@ -22,6 +22,9 @@ body {
 .text-secondary {
   color: var(--secondary);
 }
+.bg-accent {
+  background-color: var(--accent);
+}
 /* ================ Header ====================== */
 
 .lib {
