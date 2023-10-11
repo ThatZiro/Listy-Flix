@@ -32,14 +32,6 @@ body {
   color: var(--primary);
 }
 
-/* =================  ======================== */
-
-.backdrop {
-  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
-  background-position: center;
-  background-size: cover;
-}
-
 /* Highlight Input in Searchbar & hover effect */
 .autoFill:hover {
   background-color: var(--secondary);

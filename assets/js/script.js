@@ -81,7 +81,7 @@ function ScaleSplide() {
     newcount = 3;
   } else if (width > 750) {
     newcount = 2;
-  } else if (width > 500) {
+  } else {
     newcount = 1;
   }
   if (newcount != splideCount) {
@@ -120,7 +120,7 @@ function LoadCarousel() {
 
     let movieImg = $('<img>', {
       src: `./assets/images/stock-poster.png`,
-      class: `h-96 m-1 cursor-pointer ${movie}`,
+      class: `h-80 m-1 cursor-pointer border-2 border-white rounded-2xl ${movie}`,
     });
     movieDiv.append(movieA);
     movieA.append(movieImg);
@@ -360,11 +360,10 @@ function UpdateSlideBackground() {
     splide.Components.Elements.slides[currentSlideIndex];
 
   //TODO On Moved put backdrop on background
-  $('.backdrop').attr(
-    'style',
-    `background-image: url(${$(currentSlideElement)
-      .find('img')
-      .data('backdrop')}`
+  $('#backdrop').attr(
+    'src',
+    `${$(currentSlideElement).find('img').data('backdrop')}`
+      
   );
 }
 
