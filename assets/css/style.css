@@ -66,8 +66,6 @@ body {
   --tw-scale-y: 1.1;
 } */
 
-/* Target Movie page */
-
 .target-bg {
   background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2)),
     url(../images/stock-backdrop.png);
