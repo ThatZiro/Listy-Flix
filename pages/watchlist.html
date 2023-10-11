@@ -4,10 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!---------------------------------- Tailwind CSS 2.2.16 ---------------------------------->
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet" />
     <!------------------------------------- Custom CSS ---------------------------------------->
     <link rel="stylesheet" href="../assets/css/style.css" />
     <title>My Watchlist - ListyFlix</title>
@@ -16,9 +13,7 @@
   <body class="min-h-screen">
     <!-------------------------------------- Header ------------------------------------------->
     <header class="w-full py-6 px-10">
-      <a
-        href="../index.html"
-        class="inline-block text-4xl bold text-white inline-block"
+      <a href="../index.html" class="inline-block text-4xl bold text-white inline-block"
         >Listy
         <p class="inline-block text-primary">Flix</p></a
       >
@@ -27,18 +22,10 @@
     </header>
     <!-------------------------------------- Main --------------------------------------------->
     <main>
-      <div class="container mx-auto">
+      <div id="watchlist" class="container mx-auto">
         <p class="text-2xl font-semibold text-white my-3">My Library:</p>
-        <img
-          src="../assets/images/a new hope.jpg"
-          alt=""
-          class="h-56 inline m-3 transform hover:scale-110 cursor-pointer"
-        />
-        <img
-          src="../assets/images/a new hope.jpg"
-          alt=""
-          class="h-56 inline m-3 transform hover:scale-110 cursor-pointer"
-        />
+        <!-- <img src="../assets/images/a new hope.jpg" alt="" class="h-56 inline m-3 transform hover:scale-110 cursor-pointer" />
+        <img src="../assets/images/a new hope.jpg" alt="" class="h-56 inline m-3 transform hover:scale-110 cursor-pointer" /> -->
       </div>
     </main>
     <!------------------------------------- Footer -------------------------------------------->
@@ -47,12 +34,11 @@
     <script
       src="https://code.jquery.com/jquery-3.7.1.min.js"
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-      crossorigin="anonymous"
-    ></script>
+      crossorigin="anonymous"></script>
     <!------------------------------------- DayJS 1.10.6 -------------------------------------->
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.6/dayjs.min.js"></script>
     <!------------------------------------ Custom Script -------------------------------------->
-    <script src="./assets/js/utilities.js"></script>
-    <script src="./assets/js/script.js"></script>
+    <script src="../assets/js/utilities.js"></script>
+    <script src="../assets/js/watchlistScript.js"></script>
   </body>
 </html>
