@@ -114,7 +114,7 @@ function LoadCarousel() {
     });
 
     let movieA = $('<a></a>', {
-      href: `./pages/movie.html?${movie}`,
+      href: `./pages/movie.html?ref=${movie}`,
       class: `flex justify-center`,
     });
 
@@ -254,30 +254,6 @@ function LoadMoviePage(e) {
   let movieUrl = `${TMDB_url}/movie/${$(this).attr('id')}?api_key=${TMDB_key}`;
 
   ChangePage('movie', $(this).attr('id'));
-
-  return GetApiJson(movieUrl, ourOptions).then((jsonData) => {
-    window.location;
-    //Handle Certification
-    GetCertification($(this).attr('id'))
-      .then((certification) => {
-        console.log(certification.certification);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-
-    console.log(jsonData); //Main Object
-    console.log(jsonData.title); //Movie Title
-    console.log(jsonData.release_date); //Release Date
-    console.log(jsonData.vote_average); //Vote Average
-    console.log(jsonData.vote_count); //Vote Count
-    console.log(jsonData.runtime); //runtime of movie
-    console.log(jsonData.genres); //genre of movie - multiple genres
-    console.log(jsonData.tagline); //tag line above description of movie
-    console.log(jsonData.overview); // overview of the movie (description)
-    // console.log(jsonData.director) //director
-    // console.log(jsonData.featuring) //featuring
-  });
 }
 
 //This function is used to change the page
@@ -300,32 +276,6 @@ function ChangePage(page, ref) {
   }
   console.log(newLocation);
   window.location.href = newLocation;
-}
-
-//This function is used to get most recent movie certification from another fetch call
-//Input Movie ID
-//returns String containing most recent rating
-async function GetCertification(id) {
-  let certificationUrl = `${TMDB_url}/movie/${id}/release_dates?api_key=${TMDB_key}`;
-  // let url = `https://api.themoviedb.org/3/movie/335984/release_dates?api_key=337061be9657573ece2ab40bc5cb0965`;
-
-  try {
-    const certificationData = await GetApiJson(certificationUrl, ourOptions);
-    const usCertification = await certificationData.results.find(
-      (result) => result.iso_3166_1 === 'US'
-    );
-
-    if (usCertification && usCertification.release_dates.length > 0) {
-      const latestCertification =
-        usCertification.release_dates[usCertification.release_dates.length - 1];
-      return latestCertification;
-    } else {
-      return `Certification not avalible`;
-    }
-  } catch (error) {
-    console.error('Error fetching certification data:', error);
-    throw error;
-  }
 }
 
 function initilizeSplide(count) {
@@ -353,6 +303,8 @@ function initilizeSplide(count) {
     UpdateSlideBackground();
   });
 }
+
+// $('.splide__pagination') //TODO Move down a little
 
 function UpdateSlideBackground() {
   let currentSlideIndex = splide.index;

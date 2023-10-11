@@ -21,36 +21,36 @@
   <!-------------------------------------- Main --------------------------------------------->
   <main>
     <div class="flex sm:flex-row flex-col min-w-screen p-10">
-      <div class="sm:w-1/4 w-1/2 mx-auto"><img src="./assets/images/Posters/Blade_Runner_2049/blade-runner-poster.jpg" alt="" class="rounded-lg border mb-8"></div>
+      <div class="sm:w-1/4 w-1/2 mx-auto"><img src="/assets/images/stock-poster.png" alt="" class="rounded-lg border mb-8" id="poster"></div>
       <div class="sm:w-3/4 w-full">
         <!-- Certification, Title, rating -->
         <div class="flex flex-wrap text-white items-center ml-6">
-          <div class="xl:text-6xl md:text-4xl text-2xl border p-1" id="certification">R</div>
-          <p class="xl:text-6xl md:text-4xl text-2xl border-b ml-6" id="title">Blade Runner 2049</p>
-          <p class="xl:text-4xl md:text-2xl text-xl ml-6 italic" id="rating">7.5/10 - 12,366 votes</p>
+          <div class="xl:text-4xl md:text-2xl text-xl border p-1" id="certification"></div>
+          <p class="xl:text-6xl md:text-4xl text-2xl border-b ml-6" id="title"></p>
+          <p class="xl:text-4xl md:text-2xl text-xl ml-6 italic" id="rating"></p>
         </div>
         <!-- Release data and Runtime -->
         <div class="flex flex-wrap text-white items-center my-4 ml-6">
-          <p class="xl:text-2xl md:text-xl" id="release-date"> Release Date: 2017-10-06</p>
-          <p class="xl:text-2xl md:text-xl ml-6" id="runtime"> Runtime: 146 mins</p>
+          <p class="xl:text-2xl md:text-xl" id="release-date"></p>
+          <p class="xl:text-2xl md:text-xl ml-6" id="runtime"></p>
         </div>
         <!-- Genres -->
         <div class="flex text-white items-center ml-6" id="genre">
-          <div class="xl:text-xl md:text-lg bg-opacity px-4 py-1 rounded-full">Action</div>
-          <div class="xl:text-xl md:text-lg bg-opacity px-4 py-1 rounded-full ml-4">Drama</div>
-          <div class="xl:text-xl md:text-lg bg-opacity px-4 py-1 rounded-full ml-4">Mystery</div>
+          <div class="xl:text-xl md:text-lg bg-opacity px-4 py-1 rounded-full"></div>
+          <div class="xl:text-xl md:text-lg bg-opacity px-4 py-1 rounded-full ml-4"></div>
+          <div class="xl:text-xl md:text-lg bg-opacity px-4 py-1 rounded-full ml-4"></div>
         </div>
         <!-- tag line -->
-        <div class="ml-6 text-white italic my-4 xl:text-2xl md:text-xl">The key to the future is finally unearthed.</div>
+        <div class="ml-6 text-white italic my-4 xl:text-2xl md:text-xl" id='tagline'></div>
         <!-- Overview -->
         <div class="ml-6 text-white w-2/3">
           <p class="font-bold xl:text-2xl md:text-xl">Overview:</p>
-          <p class="xl:text-xl md:text-lg my-1" id="overview">Thirty years after the events of the first film, a new blade runner, LAPD Officer K, unearths a long-buried secret that has the potential to plunge what's left of society  into chaos. K's discovery leads him on a quest to find Rick Deckard, a former LAPD blade runner who has been missing for 30 years.</p>
+          <p class="xl:text-xl md:text-lg my-1" id="overview"></p>
         </div>
         <!-- cast -->
         <div class="ml-6 text-white mt-10 xl:text-2xl md:text-xl w-2/3" id="cast">
-          <p>Director:</p>
-          <p>Featuring:</p>
+          <p>(Director:)</p>
+          <p>(Featuring:)</p>
         </div>
       </div>
 
@@ -65,7 +65,7 @@
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.6/dayjs.min.js"></script>
   <!------------------------------------ Custom Script -------------------------------------->
   <script src="../assets/js/utilities.js"></script>
-  <script src="../assets/js/script.js"></script>
+  <script src="../assets/js/moiveScript.js"></script>
 </body>
 
 </html>
