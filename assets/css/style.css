@@ -2,7 +2,7 @@
   --text: #ffffff;
   --background: #000000;
   --primary: #ff5e00;
-  --secondary: #BDBDBD;
+  --secondary: #bdbdbd;
   --accent: #2450ff;
 }
 
@@ -11,12 +11,14 @@
 }
 
 body {
-  background: linear-gradient(#2C2C2C, #1C1C1C);
+  background: linear-gradient(#2c2c2c, #1c1c1c);
 }
 .text-primary {
   color: var(--primary);
 }
-.bg-primary {background-color: var(--primary);}
+.bg-primary {
+  background-color: var(--primary);
+}
 .text-secondary {
   color: var(--secondary);
 }
@@ -33,10 +35,7 @@ body {
 /* =================  ======================== */
 
 .backdrop {
-  background: linear-gradient(
-  rgba(0,0,0,.8),
-  rgba(0,0,0,.8)),
-  url(../images/Posters/Blade_Runner_2049/blade_runner_2049_backdrop.png);
+  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
   background-position: center;
   background-size: cover;
 }
@@ -70,17 +69,20 @@ body {
   background-image: url(../images/Posters/Blade_Runner_2049/blade-runner-poster.jpg);
 }
 
+/* .hover-effect:hover {
+  --tw-scale-x: 1.1;
+  --tw-scale-y: 1.1;
+} */
+
 /* Target Movie page */
 
 .target-bg {
-  background: linear-gradient(
-  rgba(0,0,0,.8),
-  rgba(0,0,0,.2)),
-  url(../images/Posters/Blade_Runner_2049/blade_runner_2049_backdrop.png);
+  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2)),
+    url(../images/Posters/Blade_Runner_2049/blade_runner_2049_backdrop.png);
   background-position: center;
   background-size: cover;
 }
 
 .bg-opacity {
-  background: rgba(0,0,0,.5)
+  background: rgba(0, 0, 0, 0.5);
 }
