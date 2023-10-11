@@ -123,7 +123,6 @@ function LoadCarousel() {
     });
 
     let movieA = $('<a></a>', {
-      href: `./pages/movie.html?ref=${movie}`,
       class: `flex justify-center`,
     });
 
@@ -177,6 +176,7 @@ function UpdateDropdown(Results, ResultsToDisplay, input) {
       class:
         'dropdownItem bg-white border rounded autoFill p-1 text-gray-600 text-xl',
       id: Results[i].id,
+      href: `./pages/movie.html?ref=${Results[i].id}`,
     })
       .append(
         $('<img>', {
@@ -287,22 +287,20 @@ function LoadMoviePage(e) {
 //This function is used to change the page
 //Input page you want to go to and page refereance if we are going to the movie page else ref can be ""
 function ChangePage(page, ref) {
-  let newLocation = window.location.origin;
-  console.log(page);
+  let oldLocation = window.location.pathname.split('/');
+  oldLocation.pop();
+  let newLocation;
+
   switch (page) {
-    case 'home':
-      newLocation = window.location.origin;
-      break;
     case 'movie': {
-      newLocation = `${window.location.origin}/pages/movie.html?ref=${ref}`;
+      newLocation = `${oldLocation.join('/')}/pages/movie.html?ref=${ref}`;
       break;
     }
     case 'library': {
-      newLocation = window.location.origin + `/pages/library.html`;
+      newLocation = `${oldLocation.join('/')}/pages/library.html`;
       break;
     }
   }
-  console.log(newLocation);
   window.location.href = newLocation;
 }
 
