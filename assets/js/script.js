@@ -15,6 +15,33 @@ const TMDB_actorEndpoint = '/search/person';
 const TMDB_discoverEndpoint = '/discover/movie';
 const TMDB_multiSearchEndpoint = '/search/multi';
 
+let carouselMovieList = [
+  '926393',
+  '872585',
+  '951491',
+  '614930',
+  '1151534',
+  '866463',
+  '670292',
+  '848685',
+  '1008042',
+  '792293',
+  '1002185',
+  '882569',
+  '968051',
+  '976573',
+  '502356',
+  '20352',
+  '626867',
+  '4982',
+  '111',
+  '24428',
+  '871',
+];
+let splide;
+
+splideCount = -1;
+
 //Temporary inputs for testing
 let library = ['293660', '238', '13', '278', '118340']; // Temp Library
 let ourInput = 'the last airbender'; // Temp Input
@@ -32,14 +59,75 @@ const ourOptions = {
 //Run when the document is done loading
 $(document).ready(function () {
   //WHEN search field is updated Update Search drop down
-  $('#search-input').on('input', UpdateSearch);
   console.log('Document Ready!');
+  $('#search-input').on('input', UpdateSearch);
+  LoadCarousel();
+  $(window).on('resize', ScaleSplide);
 });
 
 //===============================================================================
 //================================= Functions ===================================
 //===============================================================================
 
+function ScaleSplide() {
+  let width = $(window).width();
+
+  let newcount = 5;
+  if (width > 1500) {
+    newcount = 5;
+  } else if (width > 1250) {
+    newcount = 4;
+  } else if (width > 1000) {
+    newcount = 3;
+  } else if (width > 750) {
+    newcount = 2;
+  } else if (width > 500) {
+    newcount = 1;
+  }
+  if (newcount != splideCount) {
+    splideCount = newcount;
+    initilizeSplide(splideCount);
+  }
+}
+//This function handles loading the carousel when the home page loads
+function LoadCarousel() {
+  const shuffledArray = carouselMovieList
+    .slice()
+    .sort(() => Math.random() - 0.5);
+
+  const posterUrl = `https://image.tmdb.org/t/p/original`;
+
+  for (let i = 0; i < shuffledArray.length; i++) {
+    const movie = shuffledArray[i];
+    let movieUrl = `${TMDB_url}/movie/${movie}?api_key=${TMDB_key}`;
+    GetApiJson(movieUrl, ourOptions).then((jsonData) => {
+      $(`.${movie}`).attr('src', `${posterUrl}${jsonData.poster_path}`);
+      $(`.${movie}`).attr(
+        'data-backdrop',
+        `${posterUrl}${jsonData.backdrop_path}`
+      );
+      ScaleSplide();
+    });
+
+    let movieDiv = $('<li></li>', {
+      class: 'splide__slide',
+    });
+
+    let movieA = $('<a></a>', {
+      href: `./pages/movie.html?${movie}`,
+      class: `flex justify-center`,
+    });
+
+    let movieImg = $('<img>', {
+      src: `./assets/images/stock-poster.png`,
+      class: `h-96 m-1 cursor-pointer ${movie}`,
+    });
+    movieDiv.append(movieA);
+    movieA.append(movieImg);
+
+    $('#carouselMovieList').append(movieDiv);
+  }
+}
 //This function queries the database and sorts the results based on relativity
 //Input users search
 function UpdateSearch(e) {
@@ -93,6 +181,7 @@ function UpdateDropdown(Results, ResultsToDisplay, input) {
   $(`.dropdownItem`).on('click', LoadMoviePage);
 }
 
+//This function hightlights the text in the dropdown menu based on your input
 function HighlightInput(text, input) {
   // Use a regular expression to find all occurrences of the substring in the main string
   const regex = new RegExp(input, 'gi');
@@ -105,6 +194,7 @@ function HighlightInput(text, input) {
 
   return highlightedString;
 }
+
 //This function queries the database for search results based on passed input
 //Input users search
 //returns an array of relative results
@@ -190,6 +280,8 @@ function LoadMoviePage(e) {
   });
 }
 
+//This function is used to change the page
+//Input page you want to go to and page refereance if we are going to the movie page else ref can be ""
 function ChangePage(page, ref) {
   let newLocation = window.location.origin;
   console.log(page);
@@ -236,11 +328,44 @@ async function GetCertification(id) {
   }
 }
 
-var splide = new Splide('.splide', {
-  type: 'loop',
-  perPage: 6,
-  focus: 'center',
-});
+function initilizeSplide(count) {
+  console.log('Splide');
+  if (splide) {
+    splide.options.perPage = splideCount;
+    splide.destroy(true);
+  }
 
-splide.mount();
+  splide = new Splide('.splide', {
+    type: 'loop',
+    perPage: count,
+    focus: 'center',
+    autoplay: true, // Enable autoplay
+    autoplayOptions: {
+      start: 'center',
+      pauseOnHover: true,
+      waitForTransition: false,
+    },
+    autoplaySpeed: 2000, // Adjust the autoplay speed (in milliseconds)
+  });
+  splide.mount();
+  UpdateSlideBackground();
+  splide.on('moved', function () {
+    UpdateSlideBackground();
+  });
+}
+
+function UpdateSlideBackground() {
+  let currentSlideIndex = splide.index;
+  let currentSlideElement =
+    splide.Components.Elements.slides[currentSlideIndex];
+
+  //TODO On Moved put backdrop on background
+  $('.backdrop').attr(
+    'style',
+    `background-image: url(${$(currentSlideElement)
+      .find('img')
+      .data('backdrop')}`
+  );
+}
+
 //==================================================================================
