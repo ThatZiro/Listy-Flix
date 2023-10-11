@@ -28,6 +28,7 @@ let id = '';
 $(document).ready(function () {
   SetID();
   LoadMoviePage();
+  $('#addWatchlist').on(click, addToWatchlist())
 });
 
 function SetID() {
@@ -152,3 +153,7 @@ async function GetCredits() {
     throw error;
   }
 }
+
+function addToWatchlist() {
+
+};
