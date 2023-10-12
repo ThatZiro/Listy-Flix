@@ -235,42 +235,6 @@ async function QueryResults(input) {
 //This function is used to get our recommendations
 //Input How many movies we want to get
 //returns a random array of movieData
-async function GetRecommendations(movies) {
-  let genres = [];
-  let actors = [];
-
-  //Gets Movies and adds there genres to genres array
-  const apiPromisesMovie = library.map((movie) => {
-    let movieUrl = `${TMDB_url}/movie/${movie}?api_key=${TMDB_key}`;
-    return GetApiJson(movieUrl, ourOptions).then((jsonData) => {
-      jsonData.genres.forEach((element) => {
-        genres.push(element.id);
-      });
-    });
-  });
-
-  //Gets Movie Credits and adds the cast to actors array
-  const apiPromisesActor = library.map((movie) => {
-    let actorUrl = `${TMDB_url}/movie/${movie}/credits?api_key=${TMDB_key}`;
-    return GetApiJson(actorUrl, ourOptions).then((jsonData) => {
-      jsonData.cast.forEach((element) => {
-        actors.push(element.name);
-      });
-    });
-  });
-
-  await Promise.all(apiPromisesMovie);
-  await Promise.all(apiPromisesActor);
-
-  //Get top x amount of each genre and actors
-  console.log(GetMostFrequent(genres, 5));
-  console.log(GetMostFrequent(actors, 5));
-  //TODO Add functionality to get movie list based on genres and actors
-}
-
-//This function is used to get our recommendations
-//Input How many movies we want to get
-//returns a random array of movieData
 function LoadMoviePage(e) {
   console.log($(e.target));
   let item = $(e.target);
