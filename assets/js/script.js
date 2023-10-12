@@ -47,7 +47,6 @@ let carouselMovieList = [
 ];
 let splide;
 let search = '';
-
 splideCount = -1;
 
 //Temporary inputs for testing
@@ -100,9 +99,7 @@ function ScaleSplide() {
 }
 //This function handles loading the carousel when the home page loads
 function LoadCarousel() {
-  const shuffledArray = carouselMovieList
-    .slice()
-    .sort(() => Math.random() - 0.5);
+  const shuffledArray = carouselMovieList.slice().sort(() => Math.random() - 0.5);
 
   const posterUrl = `https://image.tmdb.org/t/p/original`;
 
@@ -111,10 +108,7 @@ function LoadCarousel() {
     let movieUrl = `${TMDB_url}/movie/${movie}?api_key=${TMDB_key}`;
     GetApiJson(movieUrl, ourOptions).then((jsonData) => {
       $(`.${movie}`).attr('src', `${posterUrl}${jsonData.poster_path}`);
-      $(`.${movie}`).attr(
-        'data-backdrop',
-        `${posterUrl}${jsonData.backdrop_path}`
-      );
+      $(`.${movie}`).attr('data-backdrop', `${posterUrl}${jsonData.backdrop_path}`);
       ScaleSplide();
     });
 
@@ -123,13 +117,13 @@ function LoadCarousel() {
     });
 
     let movieA = $('<a></a>', {
-      class: `flex justify-center`,
+      class: `posterhover flex justify-center`,
       href: `./pages/movie.html?ref=${movie}`,
     });
 
     let movieImg = $('<img>', {
       src: `./assets/images/stock-poster.png`,
-      class: `h-80 m-1 cursor-pointer border-2 border-white rounded-2xl ${movie}`,
+      class: ` h-80 m-1 cursor-pointer border-2 border-white rounded-2xl ${movie}`,
     });
     movieDiv.append(movieA);
     movieA.append(movieImg);
@@ -146,7 +140,7 @@ function UpdateSearch(e) {
     if (search == thisSearch) {
       SearchBuffer();
     }
-  }, 200);
+  }, 50);
 }
 
 function SearchBuffer() {
@@ -174,8 +168,7 @@ function UpdateDropdown(Results, ResultsToDisplay, input) {
     }
 
     let dropdownItem = $('<div></div>', {
-      class:
-        'dropdownItem bg-white border rounded autoFill p-1 text-gray-600 text-xl',
+      class: 'dropdownItem bg-white border rounded autoFill p-1 text-gray-600 text-xl',
       id: Results[i].id,
     })
       .append(
@@ -212,10 +205,7 @@ function HighlightInput(text, input) {
   const regex = new RegExp(input, 'gi');
 
   // Replace all occurrences of the substring with the wrapped version
-  const highlightedString = text.replace(
-    regex,
-    `<span class="highlight">$&</span>`
-  );
+  const highlightedString = text.replace(regex, `<span class="highlight">$&</span>`);
 
   return highlightedString;
 }
@@ -315,11 +305,14 @@ function initilizeSplide(count) {
     type: 'loop',
     perPage: count,
     focus: 'center',
+    wheel: true,
+    wheelSleep: '100',
+    keyboard: true,
     autoplay: true, // Enable autoplay
     autoplayOptions: {
       start: 'center',
-      pauseOnHover: true,
-      waitForTransition: false,
+      pauseOnHover: false,
+      waitForTransition: true,
     },
     autoplaySpeed: 2000, // Adjust the autoplay speed (in milliseconds)
   });
@@ -328,20 +321,33 @@ function initilizeSplide(count) {
   splide.on('moved', function () {
     UpdateSlideBackground();
   });
-}
 
+  // $('#carouselMovieList').on('mousewheel', function (e) {
+  //   var transformArray = $(this)
+  //     .css(`transform`)
+  //     .replace(/[^0-9\-.,]/g, '')
+  //     .split(',');
+  //   var transformX = parseFloat(transformArray[4]);
+  //   console.log(transformX);
+  //   e.preventDefault();
+  //   console.log(e.originalEvent.deltaY);
+  //   const scrollDirection = e.originalEvent.deltaY > 0 ? '1' : '-1';
+  //   const scrollSpeed = 50;
+
+  //   const newScrollPosition = transformX + scrollDirection * scrollSpeed;
+  //   console.log(newScrollPosition);
+
+  //   $(this).css('transform', `translateX(${newScrollPosition}px)`);
+  // });
+}
 // $('.splide__pagination') //TODO Move down a little
 
 function UpdateSlideBackground() {
   let currentSlideIndex = splide.index;
-  let currentSlideElement =
-    splide.Components.Elements.slides[currentSlideIndex];
+  let currentSlideElement = splide.Components.Elements.slides[currentSlideIndex];
 
   //TODO On Moved put backdrop on background
-  $('#backdrop').attr(
-    'src',
-    `${$(currentSlideElement).find('img').data('backdrop')}`
-  );
+  $('#backdrop').attr('src', `${$(currentSlideElement).find('img').data('backdrop')}`);
 }
 
 //==================================================================================
