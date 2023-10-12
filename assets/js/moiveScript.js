@@ -90,7 +90,6 @@ function LoadMoviePage() {
     $('#tagline').text(jsonData.tagline);
 
     $('#overview').text(jsonData.overview);
-
     //Handle Certification
     GetCredits()
       .then((credits) => {
@@ -107,7 +106,26 @@ function LoadMoviePage() {
       .catch((error) => {
         console.error('Error:', error);
       });
+
+    movies = GetData('WatchList');
+    if (movies == null) {
+      movies = [];
+    }
+
+    if (movies.includes(id)) {
+      WatchlistButtonToggle(false);
+    } else {
+      WatchlistButtonToggle(true);
+    }
   });
+}
+
+function WatchlistButtonToggle(status) {
+  if (status) {
+    $('#addWatchlist').text('+ To Watchlist');
+  } else {
+    $('#addWatchlist').text('- From Watchlist');
+  }
 }
 
 //This function is used to get most recent movie certification from another fetch call
@@ -145,22 +163,26 @@ async function GetCredits() {
 }
 
 function AddMovieToWatchlist(e) {
-  $(this).hide(); //Temp Hide The Button
-
   let watchlist = GetData('WatchList');
   if (watchlist == null) {
     watchlist = [];
   }
+
   for (let i = 0; i < watchlist.length; i++) {
     if (watchlist[i] === id) {
       watchlist.splice(i, 1);
     }
   }
 
-  watchlist.unshift(id);
+  if ($(this).text() == '- From Watchlist') {
+    WatchlistButtonToggle(true);
+  } else {
+    WatchlistButtonToggle(false);
+
+    watchlist.unshift(id);
+  }
 
   SetData('WatchList', watchlist);
-  console.log(`Movie list updated : `, watchlist);
 }
 
 function ClearWatchlist() {
