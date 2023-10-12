@@ -10,13 +10,10 @@ async function GetApiJson(requestUrl, options) {
     const response = await fetch(requestUrl, options);
 
     if (!response.ok) {
-      throw new Error(
-        `Error Getting API: ${response.status + response.statusText}`
-      );
+      throw new Error(`Error Getting API: ${response.status + response.statusText}`);
     }
 
-    if (utilities_Logs)
-      console.log(`Successfully fetched api at ${requestUrl}`);
+    if (utilities_Logs) console.log(`Successfully fetched api at ${requestUrl}`);
     return await response.json();
   } catch (error) {
     console.error(error.message);
@@ -40,13 +37,13 @@ function UnixToDate(unix) {
  * @returns {string} A new string with the first letter of each word capitalized.
  */
 function CapitalizeStringWords(string) {
-  let words = string.split(" ");
+  let words = string.split(' ');
 
   let capitalizedWords = words.map((word) => {
     return word.charAt(0).toUpperCase() + word.slice(1);
   });
 
-  return capitalizedWords.join(" ");
+  return capitalizedWords.join(' ');
 }
 //=============================================================================================================
 /**
@@ -57,7 +54,7 @@ function CapitalizeStringWords(string) {
  */
 function GetData(item) {
   let data = localStorage.getItem(item);
-  console.log("Data Retrieved from Local Storage");
+  console.log('Data Retrieved from Local Storage');
   return JSON.parse(data);
 }
 //=============================================================================================================
@@ -70,7 +67,7 @@ function GetData(item) {
 function SetData(item, data) {
   let jsonData = JSON.stringify(data);
   localStorage.setItem(item, jsonData);
-  console.log("Data Saved to Local Storage");
+  console.log('Data Saved to Local Storage');
 }
 //=============================================================================================================
 /**
@@ -118,6 +115,6 @@ function SortArrayByReletivity(array, input) {
       let location = item.indexOf(char) + 1;
       weight += location;
     }
-    console.log(item + " | " + weight);
+    console.log(item + ' | ' + weight);
   }
 }

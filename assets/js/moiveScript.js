@@ -28,7 +28,15 @@ let id = '';
 $(document).ready(function () {
   SetID();
   LoadMoviePage();
-  $('#addWatchlist').on(click, addToWatchlist())
+  $('#addWatchlist').on('click', AddMovieToWatchlist);
+  $(`#autoFillDiv`).on('click', LoadMoviePage);
+
+  //Temp Data Clear
+  $(document).keydown(function (event) {
+    if (event.ctrlKey && event.key === 'c') {
+      ClearWatchlist();
+    }
+  });
 });
 
 function SetID() {
@@ -44,21 +52,17 @@ function SetID() {
 function LoadMoviePage() {
   const posterUrl = `https://image.tmdb.org/t/p/original/`;
 
-  console.log(id);
   let movieUrl = `${TMDB_url}/movie/${id}?api_key=${TMDB_key}`;
-  console.log(movieUrl);
 
   return GetApiJson(movieUrl, ourOptions).then((jsonData) => {
     //Handle Certification
     GetCertification()
       .then((certification) => {
-        console.log(certification.certification);
         $('#certification').text(certification.certification);
       })
       .catch((error) => {
         console.error('Error:', error);
       });
-    console.log(jsonData); //Main Object$()
     //${posterUrl}${jsonData.backdrop_path}
 
     //${posterUrl}${jsonData.poster_path}
@@ -73,19 +77,12 @@ function LoadMoviePage() {
 
     $('#release-date').text(`Released: ${jsonData.release_date}`);
 
-    $('#rating').text(
-      `${Number(jsonData.vote_average.toFixed(1))}/10 - ${
-        jsonData.vote_count
-      } votes`
-    );
+    $('#rating').text(`${Number(jsonData.vote_average.toFixed(1))}/10 - ${jsonData.vote_count} votes`);
 
     $('#runtime').text(`${jsonData.runtime} mins`);
-
-    console.log(jsonData.genres.length); //genre of movie - multiple genres
     let genreDisplay = $('#genre').children();
     for (let i = 0; i < genreDisplay.length; i++) {
       if (i < jsonData.genres.length) {
-        console.log(jsonData.genres[i].name);
         $(genreDisplay[i]).text(jsonData.genres[i].name);
       } else {
         $(genreDisplay[i]).text('X');
@@ -100,7 +97,6 @@ function LoadMoviePage() {
     //Handle Certification
     GetCredits()
       .then((credits) => {
-        console.log(credits);
         let featuringEl = $('#cast').children().eq(1);
         let featuringList = credits.cast.slice(0, 5);
         let featuringListArray = featuringList.map((item) => item.name);
@@ -126,13 +122,10 @@ async function GetCertification() {
 
   try {
     const certificationData = await GetApiJson(certificationUrl, ourOptions);
-    const usCertification = await certificationData.results.find(
-      (result) => result.iso_3166_1 === 'US'
-    );
+    const usCertification = await certificationData.results.find((result) => result.iso_3166_1 === 'US');
 
     if (usCertification && usCertification.release_dates.length > 0) {
-      const latestCertification =
-        usCertification.release_dates[usCertification.release_dates.length - 1];
+      const latestCertification = usCertification.release_dates[usCertification.release_dates.length - 1];
       return latestCertification;
     } else {
       return `N/A`;
@@ -154,6 +147,26 @@ async function GetCredits() {
   }
 }
 
-function addToWatchlist() {
+function AddMovieToWatchlist(e) {
+  $(this).hide(); //Temp Hide The Button
 
-};
+  let watchlist = GetData('WatchList');
+  if (watchlist == null) {
+    watchlist = [];
+  }
+  for (let i = 0; i < watchlist.length; i++) {
+    if (watchlist[i] === id) {
+      watchlist.splice(i, 1);
+    }
+  }
+
+  watchlist.unshift(id);
+
+  SetData('WatchList', watchlist);
+  console.log(`Movie list updated : `, watchlist);
+}
+
+function ClearWatchlist() {
+  localStorage.removeItem('WatchList');
+  alert('ADMIN : Movies Cleared From Local Storage');
+}
