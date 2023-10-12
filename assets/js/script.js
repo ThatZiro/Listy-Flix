@@ -72,11 +72,9 @@ $(document).ready(function () {
   $(window).on('resize', ScaleSplide);
   $(`#autoFillDiv`).on('click', LoadMoviePage);
 });
-
 $(window).on('beforeunload', function () {
-  // You can also perform additional actions here
+  $('#search-input').val("");
 });
-
 //===============================================================================
 //================================= Functions ===================================
 //===============================================================================
@@ -328,26 +326,7 @@ function initilizeSplide(count) {
   splide.on('moved', function () {
     UpdateSlideBackground();
   });
-
-  // $('#carouselMovieList').on('mousewheel', function (e) {
-  //   var transformArray = $(this)
-  //     .css(`transform`)
-  //     .replace(/[^0-9\-.,]/g, '')
-  //     .split(',');
-  //   var transformX = parseFloat(transformArray[4]);
-  //   console.log(transformX);
-  //   e.preventDefault();
-  //   console.log(e.originalEvent.deltaY);
-  //   const scrollDirection = e.originalEvent.deltaY > 0 ? '1' : '-1';
-  //   const scrollSpeed = 50;
-
-  //   const newScrollPosition = transformX + scrollDirection * scrollSpeed;
-  //   console.log(newScrollPosition);
-
-  //   $(this).css('transform', `translateX(${newScrollPosition}px)`);
-  // });
 }
-// $('.splide__pagination') //TODO Move down a little
 
 function UpdateSlideBackground() {
   let currentSlideIndex = splide.index;
