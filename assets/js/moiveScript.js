@@ -46,9 +46,6 @@ function SetID() {
   id = ref[1];
 }
 
-//This function is used to get our recommendations
-//Input How many movies we want to get
-//returns a random array of movieData
 function LoadMoviePage() {
   const posterUrl = `https://image.tmdb.org/t/p/original/`;
 

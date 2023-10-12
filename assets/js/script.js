@@ -47,7 +47,6 @@ let carouselMovieList = [
 ];
 let splide;
 let search = '';
-
 splideCount = -1;
 
 //Temporary inputs for testing
@@ -72,6 +71,10 @@ $(document).ready(function () {
   LoadCarousel();
   $(window).on('resize', ScaleSplide);
   $(`#autoFillDiv`).on('click', LoadMoviePage);
+});
+
+$(window).on('beforeunload', function () {
+  // You can also perform additional actions here
 });
 
 //===============================================================================
@@ -100,9 +103,7 @@ function ScaleSplide() {
 }
 //This function handles loading the carousel when the home page loads
 function LoadCarousel() {
-  const shuffledArray = carouselMovieList
-    .slice()
-    .sort(() => Math.random() - 0.5);
+  const shuffledArray = carouselMovieList.slice().sort(() => Math.random() - 0.5);
 
   const posterUrl = `https://image.tmdb.org/t/p/original`;
 
@@ -111,27 +112,26 @@ function LoadCarousel() {
     let movieUrl = `${TMDB_url}/movie/${movie}?api_key=${TMDB_key}`;
     GetApiJson(movieUrl, ourOptions).then((jsonData) => {
       $(`.${movie}`).attr('src', `${posterUrl}${jsonData.poster_path}`);
-      $(`.${movie}`).attr(
-        'data-backdrop',
-        `${posterUrl}${jsonData.backdrop_path}`
-      );
+      $(`.${movie}`).attr('data-backdrop', `${posterUrl}${jsonData.backdrop_path}`);
       ScaleSplide();
     });
 
     let movieDiv = $('<li></li>', {
       class: 'splide__slide',
     });
-
+    let movieHolder = $('<div></div>', {
+      class: `posterhover flex justify-center`,
+    });
     let movieA = $('<a></a>', {
-      class: `flex justify-center`,
       href: `./pages/movie.html?ref=${movie}`,
     });
 
     let movieImg = $('<img>', {
       src: `./assets/images/stock-poster.png`,
-      class: `h-80 m-1 cursor-pointer border-2 border-white rounded-2xl ${movie}`,
+      class: ` h-80 m-1 cursor-pointer border-2 border-white rounded-2xl ${movie}`,
     });
-    movieDiv.append(movieA);
+    movieDiv.append(movieHolder);
+    movieHolder.append(movieA);
     movieA.append(movieImg);
 
     $('#carouselMovieList').append(movieDiv);
@@ -146,13 +146,13 @@ function UpdateSearch(e) {
     if (search == thisSearch) {
       SearchBuffer();
     }
-  }, 200);
+  }, 50);
 }
 
 function SearchBuffer() {
   QueryResults(search).then((result) => {
     // console.log(result);
-    UpdateDropdown(result.results, 5, result);
+    UpdateDropdown(result.results, 5, search);
   });
 }
 
@@ -174,8 +174,7 @@ function UpdateDropdown(Results, ResultsToDisplay, input) {
     }
 
     let dropdownItem = $('<div></div>', {
-      class:
-        'dropdownItem bg-white border rounded autoFill p-1 text-gray-600 text-xl',
+      class: 'dropdownItem bg-white border rounded autoFill p-1 text-gray-600 text-xl',
       id: Results[i].id,
     })
       .append(
@@ -208,14 +207,12 @@ function UpdateDropdown(Results, ResultsToDisplay, input) {
 
 //This function hightlights the text in the dropdown menu based on your input
 function HighlightInput(text, input) {
+  console.log(input);
   // Use a regular expression to find all occurrences of the substring in the main string
   const regex = new RegExp(input, 'gi');
 
   // Replace all occurrences of the substring with the wrapped version
-  const highlightedString = text.replace(
-    regex,
-    `<span class="highlight">$&</span>`
-  );
+  const highlightedString = text.replace(regex, `<span class="highlight">$&</span>`);
 
   return highlightedString;
 }
@@ -315,11 +312,14 @@ function initilizeSplide(count) {
     type: 'loop',
     perPage: count,
     focus: 'center',
+    wheel: true,
+    wheelSleep: '100',
+    keyboard: true,
     autoplay: true, // Enable autoplay
     autoplayOptions: {
       start: 'center',
-      pauseOnHover: true,
-      waitForTransition: false,
+      pauseOnHover: false,
+      waitForTransition: true,
     },
     autoplaySpeed: 2000, // Adjust the autoplay speed (in milliseconds)
   });
@@ -328,20 +328,33 @@ function initilizeSplide(count) {
   splide.on('moved', function () {
     UpdateSlideBackground();
   });
-}
 
+  // $('#carouselMovieList').on('mousewheel', function (e) {
+  //   var transformArray = $(this)
+  //     .css(`transform`)
+  //     .replace(/[^0-9\-.,]/g, '')
+  //     .split(',');
+  //   var transformX = parseFloat(transformArray[4]);
+  //   console.log(transformX);
+  //   e.preventDefault();
+  //   console.log(e.originalEvent.deltaY);
+  //   const scrollDirection = e.originalEvent.deltaY > 0 ? '1' : '-1';
+  //   const scrollSpeed = 50;
+
+  //   const newScrollPosition = transformX + scrollDirection * scrollSpeed;
+  //   console.log(newScrollPosition);
+
+  //   $(this).css('transform', `translateX(${newScrollPosition}px)`);
+  // });
+}
 // $('.splide__pagination') //TODO Move down a little
 
 function UpdateSlideBackground() {
   let currentSlideIndex = splide.index;
-  let currentSlideElement =
-    splide.Components.Elements.slides[currentSlideIndex];
+  let currentSlideElement = splide.Components.Elements.slides[currentSlideIndex];
 
   //TODO On Moved put backdrop on background
-  $('#backdrop').attr(
-    'src',
-    `${$(currentSlideElement).find('img').data('backdrop')}`
-  );
+  $('#backdrop').attr('src', `${$(currentSlideElement).find('img').data('backdrop')}`);
 }
 
 //==================================================================================
