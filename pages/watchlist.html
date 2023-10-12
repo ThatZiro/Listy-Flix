@@ -1,44 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!---------------------------------- Tailwind CSS 2.2.16 ---------------------------------->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet" />
-    <!------------------------------------- Custom CSS ---------------------------------------->
-    <link rel="stylesheet" href="../assets/css/style.css" />
-    <title>My Watchlist - ListyFlix</title>
-  </head>
 
-  <body class="min-h-screen">
-    <!-------------------------------------- Header ------------------------------------------->
-    <header class="w-full py-6 px-10">
-      <a href="../index.html" class="inline-block text-4xl bold text-white inline-block"
-        >Listy
-        <p class="inline-block text-primary">Flix</p></a
-      >
-      <a href="./pages/watchlist.html" class="lib float-right text-2xl">Watchlist</a>
-      <hr class="my-2" />
-    </header>
-    <!-------------------------------------- Main --------------------------------------------->
-    <main>
-      <div id="watchlist" class="container mx-auto">
-        <p class="text-2xl font-semibold text-white my-3">My Library:</p>
-        <!-- <img src="../assets/images/a new hope.jpg" alt="" class="h-56 inline m-3 transform hover:scale-110 cursor-pointer" />
-        <img src="../assets/images/a new hope.jpg" alt="" class="h-56 inline m-3 transform hover:scale-110 cursor-pointer" /> -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!---------------------------------- Tailwind CSS 2.2.16 ---------------------------------->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet" />
+  <!------------------------------------- Custom CSS ---------------------------------------->
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <title>My Watchlist - ListyFlix</title>
+</head>
+
+<body class="min-h-screen">
+  <!-------------------------------------- Header ------------------------------------------->
+  <header class="w-full py-4 px-10">
+    <a href="../index.html" class="inline-block">
+      <img src="../assets/images/Logo.png" alt="" class="h-10" />
+    </a>
+    <a href="./pages/watchlist.html" class="lib float-right text-2xl">Watchlist</a>
+  </header>
+  <!-------------------------------------- Main --------------------------------------------->
+  <main class="min-h-screen bg-gradiant">
+    <div class="container mx-auto pt-20 min-h-5/6">
+      <p class="text-2xl font-semibold text-white text-center my-3">My Watchlist</p>
+      <div class="flex flex-wrap border-2 p-5 bg-dark justify-center" id="watchlist">
+        <img src="../assets/images/Posters/Blade_Runner_2049/blade-runner-poster.jpg" alt=""
+          class="h-72 inline m-3 transform hover:scale-110 cursor-pointer rounded-xl shadow" id="" />
+        
       </div>
-    </main>
-    <!------------------------------------- Footer -------------------------------------------->
-    <footer></footer>
-    <!------------------------------------- Jquery 3.7.1 -------------------------------------->
-    <script
-      src="https://code.jquery.com/jquery-3.7.1.min.js"
-      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-      crossorigin="anonymous"></script>
-    <!------------------------------------- DayJS 1.10.6 -------------------------------------->
-    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.6/dayjs.min.js"></script>
-    <!------------------------------------ Custom Script -------------------------------------->
-    <script src="../assets/js/utilities.js"></script>
-    <script src="../assets/js/watchlistScript.js"></script>
-  </body>
+    </div>
+  </main>
+  <!------------------------------------- Footer -------------------------------------------->
+  <footer></footer>
+  <!------------------------------------- Jquery 3.7.1 -------------------------------------->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <!------------------------------------- DayJS 1.10.6 -------------------------------------->
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.6/dayjs.min.js"></script>
+  <!------------------------------------ Custom Script -------------------------------------->
+  <script src="../assets/js/utilities.js"></script>
+  <script src="../assets/js/watchlistScript.js"></script>
+</body>
+
 </html>

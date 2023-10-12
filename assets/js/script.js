@@ -117,9 +117,10 @@ function LoadCarousel() {
     let movieDiv = $('<li></li>', {
       class: 'splide__slide',
     });
-
-    let movieA = $('<a></a>', {
+    let movieHolder = $('<div></div>', {
       class: `posterhover flex justify-center`,
+    });
+    let movieA = $('<a></a>', {
       href: `./pages/movie.html?ref=${movie}`,
     });
 
@@ -127,7 +128,8 @@ function LoadCarousel() {
       src: `./assets/images/stock-poster.png`,
       class: ` h-80 m-1 cursor-pointer border-2 border-white rounded-2xl ${movie}`,
     });
-    movieDiv.append(movieA);
+    movieDiv.append(movieHolder);
+    movieHolder.append(movieA);
     movieA.append(movieImg);
 
     $('#carouselMovieList').append(movieDiv);
@@ -148,7 +150,7 @@ function UpdateSearch(e) {
 function SearchBuffer() {
   QueryResults(search).then((result) => {
     // console.log(result);
-    UpdateDropdown(result.results, 5, result);
+    UpdateDropdown(result.results, 5, search);
   });
 }
 
@@ -203,6 +205,7 @@ function UpdateDropdown(Results, ResultsToDisplay, input) {
 
 //This function hightlights the text in the dropdown menu based on your input
 function HighlightInput(text, input) {
+  console.log(input);
   // Use a regular expression to find all occurrences of the substring in the main string
   const regex = new RegExp(input, 'gi');
 
@@ -323,26 +326,7 @@ function initilizeSplide(count) {
   splide.on('moved', function () {
     UpdateSlideBackground();
   });
-
-  // $('#carouselMovieList').on('mousewheel', function (e) {
-  //   var transformArray = $(this)
-  //     .css(`transform`)
-  //     .replace(/[^0-9\-.,]/g, '')
-  //     .split(',');
-  //   var transformX = parseFloat(transformArray[4]);
-  //   console.log(transformX);
-  //   e.preventDefault();
-  //   console.log(e.originalEvent.deltaY);
-  //   const scrollDirection = e.originalEvent.deltaY > 0 ? '1' : '-1';
-  //   const scrollSpeed = 50;
-
-  //   const newScrollPosition = transformX + scrollDirection * scrollSpeed;
-  //   console.log(newScrollPosition);
-
-  //   $(this).css('transform', `translateX(${newScrollPosition}px)`);
-  // });
 }
-// $('.splide__pagination') //TODO Move down a little
 
 function UpdateSlideBackground() {
   let currentSlideIndex = splide.index;
