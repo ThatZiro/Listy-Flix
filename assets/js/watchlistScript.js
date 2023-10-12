@@ -30,6 +30,7 @@ $(document).ready(function () {
   GetWatchList();
 
   $('#watchlist').on('click', GoToMovie);
+  GetRecommendations();
 });
 
 function GetWatchList() {
@@ -55,7 +56,7 @@ function AddMoviesToPage(movieData) {
     $('<img>', {
       src: poster,
       alt: '',
-      class: 'h-56 inline m-3 transform hover:scale-110 cursor-pointer',
+      class: 'h-72 inline m-3 transform hover:scale-110 cursor-pointer rounded-xl shadow',
       id: movieData.id,
     })
   );
@@ -69,4 +70,51 @@ function GoToMovie(e) {
   oldLocation.pop();
   let newLocation = `${oldLocation.join('/')}/movie.html?ref=${item.attr('id')}`;
   window.location.href = newLocation;
+}
+
+function GoToMovie(e) {
+  console.log($(e.target));
+  let item = $(e.target);
+
+  let oldLocation = window.location.pathname.split('/');
+  oldLocation.pop();
+  let newLocation = `${oldLocation.join('/')}/movie.html?ref=${item.attr('id')}`;
+  window.location.href = newLocation;
+}
+
+//This function is used to get our recommendations
+//Input How many movies we want to get
+//returns a random array of movieData
+async function GetRecommendations() {
+  movies = GetData('WatchList');
+  let genres = [];
+  let actors = [];
+
+  //Gets Movies and adds there genres to genres array
+  const apiPromisesMovie = movies.map((movie) => {
+    let movieUrl = `${TMDB_url}/movie/${movie}?api_key=${TMDB_key}`;
+    return GetApiJson(movieUrl, ourOptions).then((jsonData) => {
+      jsonData.genres.forEach((element) => {
+        genres.push(element.id);
+      });
+    });
+  });
+
+  //Gets Movie Credits and adds the cast to actors array
+  const apiPromisesActor = movies.map((movie) => {
+    let actorUrl = `${TMDB_url}/movie/${movie}/credits?api_key=${TMDB_key}`;
+    return GetApiJson(actorUrl, ourOptions).then((jsonData) => {
+      jsonData.cast.forEach((element) => {
+        actors.push(element.name);
+      });
+    });
+  });
+
+  await Promise.all(apiPromisesMovie);
+  await Promise.all(apiPromisesActor);
+
+  //Get top x amount of each genre and actors
+  console.log(GetMostFrequent(genres, 5));
+  console.log(GetMostFrequent(actors, 5));
+  //TODO Add functionality to get movie list based on genres and actors
 }
