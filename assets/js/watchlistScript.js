@@ -30,7 +30,7 @@ $(document).ready(function () {
   GetWatchList();
 
   $('#watchlist').on('click', GoToMovie);
-  GetRecommendations();
+  // GetRecommendations();
 });
 
 function GetWatchList() {
@@ -38,18 +38,23 @@ function GetWatchList() {
   console.log(watchlistIDS);
 
   watchListData = [];
-  for (const movie of watchlistIDS) {
-    let movieUrl = `${TMDB_url}/movie/${movie}}?api_key=${TMDB_key}`;
-    GetApiJson(movieUrl, ourOptions).then((jsonData) => {
-      watchListData.push(jsonData);
-      AddMoviesToPage(jsonData);
-    });
+  if (watchlistIDS != null) {
+    $('#watchlist p').hide();
+    for (const movie of watchlistIDS) {
+      let movieUrl = `${TMDB_url}/movie/${movie}}?api_key=${TMDB_key}`;
+      GetApiJson(movieUrl, ourOptions).then((jsonData) => {
+        watchListData.push(jsonData);
+        AddMoviesToPage(jsonData);
+      });
+    }
   }
+
   console.log(watchListData);
 }
 
 function AddMoviesToPage(movieData) {
   console.log('Add');
+  //TODO If MovieData is empty display "Get some movies"
   const posterUrl = `https://image.tmdb.org/t/p/original/`;
   let poster = `${posterUrl}${movieData.poster_path}`;
   $('#watchlist').append(
@@ -87,6 +92,8 @@ function GoToMovie(e) {
 //returns a random array of movieData
 async function GetRecommendations() {
   movies = GetData('WatchList');
+
+  //TODO Null Check
   let genres = [];
   let actors = [];
 
