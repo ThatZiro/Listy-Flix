@@ -13,18 +13,34 @@
 body {
   background: linear-gradient(#2c2c2c, #1c1c1c);
 }
+
 .text-primary {
   color: var(--primary);
 }
+
 .bg-primary {
   background-color: var(--primary);
 }
+
 .text-secondary {
   color: var(--secondary);
 }
+
 .bg-accent {
   background-color: var(--accent);
 }
+
+.bg-dark {
+  background: linear-gradient(#2c2c2c, #1c1c1c);
+}
+
+.bg-gradiant {
+  background-image: url(../images/gradiant-backdrop.png);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 /* ================ Header ====================== */
 
 .lib {
