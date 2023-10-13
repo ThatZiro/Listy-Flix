@@ -69,11 +69,10 @@ $(document).ready(function () {
   console.log('Document Ready!');
   $('#search-input').on('input', UpdateSearch);
   LoadCarousel();
-  $(window).on('resize', ScaleSplide);
   $(`#autoFillDiv`).on('click', LoadMoviePage);
 });
 $(window).on('beforeunload', function () {
-  $('#search-input').val("");
+  $('#search-input').val('');
 });
 //===============================================================================
 //================================= Functions ===================================
@@ -111,7 +110,9 @@ function LoadCarousel() {
     GetApiJson(movieUrl, ourOptions).then((jsonData) => {
       $(`.${movie}`).attr('src', `${posterUrl}${jsonData.poster_path}`);
       $(`.${movie}`).attr('data-backdrop', `${posterUrl}${jsonData.backdrop_path}`);
-      ScaleSplide();
+      if (i == shuffledArray.length - 1) {
+        ScaleSplide();
+      }
     });
 
     let movieDiv = $('<li></li>', {
@@ -290,6 +291,7 @@ function initilizeSplide(count) {
   splide.on('moved', function () {
     UpdateSlideBackground();
   });
+  $(window).on('resize', ScaleSplide);
 }
 
 function UpdateSlideBackground() {
