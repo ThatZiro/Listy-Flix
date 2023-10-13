@@ -22,6 +22,10 @@ body {
   background-color: var(--primary);
 }
 
+.bg-primary-dark {
+  background: rgba(255,94,0,0.3);
+}
+
 .text-secondary {
   color: var(--secondary);
 }
