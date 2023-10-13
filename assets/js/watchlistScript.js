@@ -31,6 +31,7 @@ $(document).ready(function () {
 
   $('#watchlist').on('click', GoToMovie);
   // GetRecommendations();
+  $('#recommended').on('click', GoToMovie);
 });
 
 function GetWatchList() {
@@ -48,7 +49,7 @@ function GetWatchList() {
       });
     }
   }
-
+  GetRecommendations();
   console.log(watchListData);
 }
 
@@ -78,7 +79,10 @@ function GoToMovie(e) {
 }
 
 function GoToMovie(e) {
-  console.log($(e.target));
+  if (!$(e.target).is('img')) {
+    return;
+  }
+  console.log(e.target);
   let item = $(e.target);
 
   let oldLocation = window.location.pathname.split('/');
@@ -91,7 +95,7 @@ function GoToMovie(e) {
 //Input How many movies we want to get
 //returns a random array of movieData
 async function GetRecommendations() {
-  movies = GetData('WatchList');
+  let movies = GetData('WatchList');
 
   //TODO Null Check
   let genres = [];
@@ -109,8 +113,8 @@ async function GetRecommendations() {
 
   //Gets Movie Credits and adds the cast to actors array
   const apiPromisesActor = movies.map((movie) => {
-    let actorUrl = `${TMDB_url}/movie/${movie}/credits?api_key=${TMDB_key}`;
-    return GetApiJson(actorUrl, ourOptions).then((jsonData) => {
+    let actorsUrl = `${TMDB_url}/movie/${movie}/credits?api_key=${TMDB_key}`;
+    return GetApiJson(actorsUrl, ourOptions).then((jsonData) => {
       jsonData.cast.forEach((element) => {
         actors.push(element.name);
       });
@@ -121,7 +125,57 @@ async function GetRecommendations() {
   await Promise.all(apiPromisesActor);
 
   //Get top x amount of each genre and actors
-  console.log(GetMostFrequent(genres, 5));
-  console.log(GetMostFrequent(actors, 5));
+  let topGenres = GetMostFrequent(genres, 5);
+  let topActors = GetMostFrequent(actors, 5);
   //TODO Add functionality to get movie list based on genres and actors
+  let movieList = [];
+
+  for (const genre of topGenres) {
+    //Get 5 Movies
+    let genreUrl = `${TMDB_url}/discover/movie?api_key=${TMDB_key}&with_genres=${genre}`;
+    let data = await GetApiJson(genreUrl, ourOptions);
+    let top3 = data.results.splice(0, 3);
+    for (let i = 0; i < top3.length; i++) {
+      movieList.push(top3[i]);
+    }
+  }
+
+  for (const actor of topActors) {
+    let actorUrl = `${TMDB_url}/search/person?api_key=${TMDB_key}&query=${actor}`;
+    let data = await GetApiJson(actorUrl, ourOptions);
+    let top3 = data.results[0].known_for.splice(0, 3);
+    for (let i = 0; i < top3.length; i++) {
+      movieList.push(top3[i]);
+    }
+  }
+
+  movieList = movieList.filter((movie) => {
+    return !movies.includes(movie.id.toString());
+  });
+  console.log(movieList);
+  movieList = movieList.filter((movie, index, self) => index === self.findIndex((m) => m.id === movie.id));
+  console.log(movieList);
+
+  let recommendationsList = [];
+  //5 Recommended Movies
+  for (let i = 0; i < 5; i++) {
+    let index = Math.floor(Math.random() * movieList.length);
+    recommendationsList.push(movieList[index]);
+    movieList.splice(index, 1);
+  }
+
+  console.log(recommendationsList);
+
+  for (const rec of recommendationsList) {
+    const posterUrl = `https://image.tmdb.org/t/p/original/`;
+    let poster = `${posterUrl}${rec.poster_path}`;
+    $('#recommended').append(
+      $('<img>', {
+        src: poster,
+        alt: '',
+        class: 'lg:h-72 sm:h-56 h-36 inline m-3 transform hover:scale-110 cursor-pointer rounded-xl shadow',
+        id: rec.id,
+      })
+    );
+  }
 }

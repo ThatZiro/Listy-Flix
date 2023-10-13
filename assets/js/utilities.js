@@ -6,7 +6,6 @@
  * @returns {Promise<any>} A Promise that resolves with the fetched JSON data or rejects with an error message.
  */
 async function GetApiJson(requestUrl, options) {
-  console.log(requestUrl);
   try {
     const response = await fetch(requestUrl, options);
 
