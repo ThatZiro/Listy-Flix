@@ -61,7 +61,7 @@ function AddMoviesToPage(movieData) {
     $('<img>', {
       src: poster,
       alt: '',
-      class: 'h-72 inline m-3 transform hover:scale-110 cursor-pointer rounded-xl shadow',
+      class: 'lg:h-72 sm:h-56 h-36 inline m-3 transform hover:scale-110 cursor-pointer rounded-xl shadow',
       id: movieData.id,
     })
   );
