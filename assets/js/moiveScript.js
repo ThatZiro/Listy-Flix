@@ -5,7 +5,7 @@
 const utilities_Logs = false;
 
 //Disable stream avalability api calls
-const toggleStreamAvalability = false;
+const toggleStreamAvalability = true;
 
 //TMDB Variables for queries
 const TMDB_key = '337061be9657573ece2ab40bc5cb0965';
