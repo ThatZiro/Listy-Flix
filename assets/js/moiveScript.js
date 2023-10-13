@@ -120,6 +120,8 @@ function LoadMoviePage() {
     } else {
       WatchlistButtonToggle(true);
     }
+
+    DisplayStreamingAvalabilty();
   });
 }
 
@@ -191,6 +193,84 @@ function AddMovieToWatchlist(e) {
 function ClearWatchlist() {
   localStorage.removeItem('WatchList');
   alert('ADMIN : Movies Cleared From Local Storage');
+}
+
+async function DisplayStreamingAvalabilty() {
+  //Fetch Data from API using input
+  const SA_url = `https://streaming-availability.p.rapidapi.com/get?output_language=en`;
+  const url = `${SA_url}&tmdb_id=movie/${id}`;
+  const SA_options = {
+    method: 'GET',
+    headers: {
+      //'X-RapidAPI-Key': '9d900f40famshab4ec5577e22c8bp15bb35jsn4815264ed7b7', // Brandon's key
+      'X-RapidAPI-Key': 'e517718793mshc32498728a54ef2p1d6902jsn24ec7261a3d8', // Jared's key
+      // 'X-RapidAPI-Key': '0368508b97msh09a48829a6827d0p1ea4b9jsn4b2d070dbc10', // Jorlyna's key
+      'X-RapidAPI-Host': 'streaming-availability.p.rapidapi.com',
+    },
+  };
+  // console.log(url);
+  let streamingInfo = [];
+  let streamingData = await GetApiJson(url, SA_options);
+
+  if (!streamingData) {
+    streamingData = [];
+  } else {
+    if (streamingData.result.streamingInfo.us) {
+      streamingInfo = streamingData.result.streamingInfo.us;
+    }
+  }
+
+  console.log(streamingData);
+  // console.log(streamingData.result.streamingInfo.us);
+
+  let found = [];
+  let sortedInfo = [];
+  console.log(streamingInfo);
+  for (const info of streamingInfo) {
+    if (info.streamingType == 'subscription' && !found.includes(info.service)) {
+      found.push(info.service);
+      sortedInfo.push(info);
+    }
+  }
+  for (const info of streamingInfo) {
+    if (info.streamingType == 'rent' && !found.includes(info.service)) {
+      found.push(info.service);
+      sortedInfo.push(info);
+    }
+  }
+  console.log(sortedInfo);
+
+  //Sort Data to limit results? Maybe only include the popular providers (Netflix, hulu, prime, apple etc)
+  //For Each Service
+  if (sortedInfo.length > 0) {
+    for (const service of sortedInfo) {
+      $('#stream').append(
+        $(`<a></a>`, {
+          id: service.service,
+          href: service.link,
+          target: 'blank',
+        })
+      );
+
+      console.log(streamingServices.services[service.service].images.darkThemeImage);
+      $(`#${service.service}`).append(
+        $('<img>', {
+          src: streamingServices.services[service.service].images.darkThemeImage,
+          class: 'm-4 md:h-16 h-8',
+        })
+      );
+    }
+  } else {
+    $('#stream').append(
+      $(`<p></p>`, {
+        text: 'Not avalible to stream',
+        class: 'text-white bg-red-500 opacity-75 rounded-full p-1 px-5 text-xl mt-4',
+      })
+    );
+  }
+
+  // --Display Service in Streamhere Div as Ancor and Image
+  //If No StreamServices are avalible display "Not available to stream" message
 }
 //===============================================================================
 //================================= Stream Data =================================
@@ -337,149 +417,149 @@ const streamingServices = {
         image: '',
       },
     },
-  },
-  mubi: {
-    id: 'mubi',
-    name: 'Mubi',
-    homePage: 'https://mubi.com',
-    themeColorCode: '#001588',
-    images: {
-      lightThemeImage: 'https://media.movieofthenight.com/services/mubi/logo-light-theme.svg',
-      darkThemeImage: 'https://media.movieofthenight.com/services/mubi/logo-dark-theme.svg',
-      whiteImage: 'https://media.movieofthenight.com/services/mubi/logo-white.svg',
+    mubi: {
+      id: 'mubi',
+      name: 'Mubi',
+      homePage: 'https://mubi.com',
+      themeColorCode: '#001588',
+      images: {
+        lightThemeImage: 'https://media.movieofthenight.com/services/mubi/logo-light-theme.svg',
+        darkThemeImage: 'https://media.movieofthenight.com/services/mubi/logo-dark-theme.svg',
+        whiteImage: 'https://media.movieofthenight.com/services/mubi/logo-white.svg',
+      },
+      supportedStreamingTypes: {
+        addon: false,
+        buy: false,
+        free: false,
+        rent: false,
+        subscription: true,
+      },
     },
-    supportedStreamingTypes: {
-      addon: false,
-      buy: false,
-      free: false,
-      rent: false,
-      subscription: true,
+    netflix: {
+      id: 'netflix',
+      name: 'Netflix',
+      homePage: 'https://www.netflix.com',
+      themeColorCode: '#E50914',
+      images: {
+        lightThemeImage: 'https://media.movieofthenight.com/services/netflix/logo-light-theme.svg',
+        darkThemeImage: 'https://media.movieofthenight.com/services/netflix/logo-dark-theme.svg',
+        whiteImage: 'https://media.movieofthenight.com/services/netflix/logo-white.svg',
+      },
+      supportedStreamingTypes: {
+        addon: false,
+        buy: false,
+        free: false,
+        rent: false,
+        subscription: true,
+      },
     },
-  },
-  netflix: {
-    id: 'netflix',
-    name: 'Netflix',
-    homePage: 'https://www.netflix.com',
-    themeColorCode: '#E50914',
-    images: {
-      lightThemeImage: 'https://media.movieofthenight.com/services/netflix/logo-light-theme.svg',
-      darkThemeImage: 'https://media.movieofthenight.com/services/netflix/logo-dark-theme.svg',
-      whiteImage: 'https://media.movieofthenight.com/services/netflix/logo-white.svg',
+    paramount: {
+      id: 'paramount',
+      name: 'Paramount+',
+      homePage: 'https://www.paramountplus.com',
+      themeColorCode: '#0064FF',
+      images: {
+        lightThemeImage: 'https://media.movieofthenight.com/services/paramount/logo-light-theme.svg',
+        darkThemeImage: 'https://media.movieofthenight.com/services/paramount/logo-dark-theme.svg',
+        whiteImage: 'https://media.movieofthenight.com/services/paramount/logo-white.svg',
+      },
+      supportedStreamingTypes: {
+        addon: false,
+        buy: false,
+        free: true,
+        rent: false,
+        subscription: true,
+      },
     },
-    supportedStreamingTypes: {
-      addon: false,
-      buy: false,
-      free: false,
-      rent: false,
-      subscription: true,
+    peacock: {
+      id: 'peacock',
+      name: 'Peacock',
+      homePage: 'https://www.peacocktv.com',
+      themeColorCode: '#000000',
+      images: {
+        lightThemeImage: 'https://media.movieofthenight.com/services/peacock/logo-light-theme.svg',
+        darkThemeImage: 'https://media.movieofthenight.com/services/peacock/logo-dark-theme.svg',
+        whiteImage: 'https://media.movieofthenight.com/services/peacock/logo-white.svg',
+      },
+      supportedStreamingTypes: {
+        addon: false,
+        buy: false,
+        free: true,
+        rent: false,
+        subscription: true,
+      },
     },
-  },
-  paramount: {
-    id: 'paramount',
-    name: 'Paramount+',
-    homePage: 'https://www.paramountplus.com',
-    themeColorCode: '#0064FF',
-    images: {
-      lightThemeImage: 'https://media.movieofthenight.com/services/paramount/logo-light-theme.svg',
-      darkThemeImage: 'https://media.movieofthenight.com/services/paramount/logo-dark-theme.svg',
-      whiteImage: 'https://media.movieofthenight.com/services/paramount/logo-white.svg',
+    prime: {
+      id: 'prime',
+      name: 'Prime Video',
+      homePage: 'https://www.amazon.com/gp/video/storefront/',
+      themeColorCode: '#00A8E1',
+      images: {
+        lightThemeImage: 'https://media.movieofthenight.com/services/prime/logo-light-theme.svg',
+        darkThemeImage: 'https://media.movieofthenight.com/services/prime/logo-dark-theme.svg',
+        whiteImage: 'https://media.movieofthenight.com/services/prime/logo-white.svg',
+      },
+      supportedStreamingTypes: {
+        addon: true,
+        buy: true,
+        free: false,
+        rent: true,
+        subscription: true,
+      },
     },
-    supportedStreamingTypes: {
-      addon: false,
-      buy: false,
-      free: true,
-      rent: false,
-      subscription: true,
+    showtime: {
+      id: 'showtime',
+      name: 'Showtime',
+      homePage: 'https://www.sho.com',
+      themeColorCode: '#ff1f2c',
+      images: {
+        lightThemeImage: 'https://media.movieofthenight.com/services/showtime/logo-light-theme.svg',
+        darkThemeImage: 'https://media.movieofthenight.com/services/showtime/logo-dark-theme.svg',
+        whiteImage: 'https://media.movieofthenight.com/services/showtime/logo-white.svg',
+      },
+      supportedStreamingTypes: {
+        addon: false,
+        buy: false,
+        free: false,
+        rent: false,
+        subscription: true,
+      },
     },
-  },
-  peacock: {
-    id: 'peacock',
-    name: 'Peacock',
-    homePage: 'https://www.peacocktv.com',
-    themeColorCode: '#000000',
-    images: {
-      lightThemeImage: 'https://media.movieofthenight.com/services/peacock/logo-light-theme.svg',
-      darkThemeImage: 'https://media.movieofthenight.com/services/peacock/logo-dark-theme.svg',
-      whiteImage: 'https://media.movieofthenight.com/services/peacock/logo-white.svg',
+    starz: {
+      id: 'starz',
+      name: 'Starz',
+      homePage: 'https://www.starz.com',
+      themeColorCode: '#006576',
+      images: {
+        lightThemeImage: 'https://media.movieofthenight.com/services/starz/logo-light-theme.svg',
+        darkThemeImage: 'https://media.movieofthenight.com/services/starz/logo-dark-theme.svg',
+        whiteImage: 'https://media.movieofthenight.com/services/starz/logo-white.svg',
+      },
+      supportedStreamingTypes: {
+        addon: false,
+        buy: false,
+        free: false,
+        rent: false,
+        subscription: true,
+      },
     },
-    supportedStreamingTypes: {
-      addon: false,
-      buy: false,
-      free: true,
-      rent: false,
-      subscription: true,
-    },
-  },
-  prime: {
-    id: 'prime',
-    name: 'Prime Video',
-    homePage: 'https://www.amazon.com/gp/video/storefront/',
-    themeColorCode: '#00A8E1',
-    images: {
-      lightThemeImage: 'https://media.movieofthenight.com/services/prime/logo-light-theme.svg',
-      darkThemeImage: 'https://media.movieofthenight.com/services/prime/logo-dark-theme.svg',
-      whiteImage: 'https://media.movieofthenight.com/services/prime/logo-white.svg',
-    },
-    supportedStreamingTypes: {
-      addon: true,
-      buy: true,
-      free: false,
-      rent: true,
-      subscription: true,
-    },
-  },
-  showtime: {
-    id: 'showtime',
-    name: 'Showtime',
-    homePage: 'https://www.sho.com',
-    themeColorCode: '#ff1f2c',
-    images: {
-      lightThemeImage: 'https://media.movieofthenight.com/services/showtime/logo-light-theme.svg',
-      darkThemeImage: 'https://media.movieofthenight.com/services/showtime/logo-dark-theme.svg',
-      whiteImage: 'https://media.movieofthenight.com/services/showtime/logo-white.svg',
-    },
-    supportedStreamingTypes: {
-      addon: false,
-      buy: false,
-      free: false,
-      rent: false,
-      subscription: true,
-    },
-  },
-  starz: {
-    id: 'starz',
-    name: 'Starz',
-    homePage: 'https://www.starz.com',
-    themeColorCode: '#006576',
-    images: {
-      lightThemeImage: 'https://media.movieofthenight.com/services/starz/logo-light-theme.svg',
-      darkThemeImage: 'https://media.movieofthenight.com/services/starz/logo-dark-theme.svg',
-      whiteImage: 'https://media.movieofthenight.com/services/starz/logo-white.svg',
-    },
-    supportedStreamingTypes: {
-      addon: false,
-      buy: false,
-      free: false,
-      rent: false,
-      subscription: true,
-    },
-  },
-  zee5: {
-    id: 'zee5',
-    name: 'Zee5',
-    homePage: 'https://www.zee5.com/global',
-    themeColorCode: '#8230c6',
-    images: {
-      lightThemeImage: 'https://media.movieofthenight.com/services/zee5/logo-light-theme.svg',
-      darkThemeImage: 'https://media.movieofthenight.com/services/zee5/logo-dark-theme.svg',
-      whiteImage: 'https://media.movieofthenight.com/services/zee5/logo-white.svg',
-    },
-    supportedStreamingTypes: {
-      addon: false,
-      buy: false,
-      free: false,
-      rent: false,
-      subscription: true,
+    zee5: {
+      id: 'zee5',
+      name: 'Zee5',
+      homePage: 'https://www.zee5.com/global',
+      themeColorCode: '#8230c6',
+      images: {
+        lightThemeImage: 'https://media.movieofthenight.com/services/zee5/logo-light-theme.svg',
+        darkThemeImage: 'https://media.movieofthenight.com/services/zee5/logo-dark-theme.svg',
+        whiteImage: 'https://media.movieofthenight.com/services/zee5/logo-white.svg',
+      },
+      supportedStreamingTypes: {
+        addon: false,
+        buy: false,
+        free: false,
+        rent: false,
+        subscription: true,
+      },
     },
   },
 };
