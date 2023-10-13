@@ -4,6 +4,9 @@
 //Remove Debug Messages
 const utilities_Logs = false;
 
+//Disable stream avalability api calls
+const toggleStreamAvalability = false;
+
 //TMDB Variables for queries
 const TMDB_key = '337061be9657573ece2ab40bc5cb0965';
 const TMDB_url = 'https://api.themoviedb.org/3';
@@ -121,7 +124,9 @@ function LoadMoviePage() {
       WatchlistButtonToggle(true);
     }
 
-    DisplayStreamingAvalabilty();
+    if (toggleStreamAvalability) {
+      DisplayStreamingAvalabilty();
+    }
   });
 }
 
