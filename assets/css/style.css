@@ -10,6 +10,7 @@
   box-sizing: border-box;
 }
 
+/* ================ Text and background colors =============== */
 body {
   background: linear-gradient(#2c2c2c, #1c1c1c);
 }
@@ -23,7 +24,7 @@ body {
 }
 
 .bg-primary-dark {
-  background: rgba(255,94,0,0.3);
+  background: rgba(255, 94, 0, 0.3);
 }
 
 .text-secondary {
@@ -45,7 +46,17 @@ body {
   background-repeat: no-repeat;
 }
 
-/* ================ Header ====================== */
+.target-bg {
+  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2)), url(../images/stock-backdrop.png);
+  background-position: center;
+  background-size: cover;
+}
+
+.bg-opacity {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* ========================= Header ============================ */
 
 .lib {
   color: var(--text);
@@ -55,7 +66,7 @@ body {
   color: var(--primary);
 }
 
-/* Highlight Input in Searchbar & hover effect */
+/* ======= Highlight Input in Searchbar & hover effect ======== */
 .autoFill:hover {
   background-color: var(--secondary);
   cursor: pointer;
@@ -74,30 +85,12 @@ body {
   outline: none;
 }
 
-/* Carousel */
+/* ===================== Carousel =============================== */
 .movie-cards {
   background-position: center;
   background-size: cover;
 }
 
-.blade-runner {
-  background-image: url(../images/Posters/Blade_Runner_2049/blade-runner-poster.jpg);
-}
-
-/* .hover-effect:hover {
-  --tw-scale-x: 1.1;
-  --tw-scale-y: 1.1;
-} */
-
-.target-bg {
-  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2)), url(../images/stock-backdrop.png);
-  background-position: center;
-  background-size: cover;
-}
-
-.bg-opacity {
-  background: rgba(0, 0, 0, 0.5);
-}
 .splide__arrow--prev {
   left: -3em;
 }
@@ -105,10 +98,3 @@ body {
 .splide__arrow--next {
   right: -3em;
 }
-/* .posterhover img {
-  transition: all ease 0.1s;
-}
-.posterhover img:hover {
-  border-color: var(--accent);
-  border-radius: 25px;
-} */
