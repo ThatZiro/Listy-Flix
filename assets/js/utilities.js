@@ -1,3 +1,58 @@
+//===============================================================================
+//=========================== Configuration Variables ==========================
+//===============================================================================
+
+const utilities_Logs = false; // Set to 'false' to disable debug messages from utlities.
+
+const toggleStreamAvalability = true; // Set to 'false' to disable stream avalability from showing.
+
+const TMDB_key = '337061be9657573ece2ab40bc5cb0965'; // The API key for The Movie Database (TMDB).
+const TMDB_url = 'https://api.themoviedb.org/3'; // Base URL for TMDB API.
+const TMDB_posterUrl = `https://image.tmdb.org/t/p/original`; //Base URL for TMDB Posters.
+const TMDB_movieEndpoint = '/search/movie'; // Endpoint for searching movies on The Movie Database (TMDB).
+
+// Options for making API requests to (TMDB).
+const ourOptions = {
+  method: 'GET',
+  cache: 'reload',
+};
+
+// Base URL for (SA) Streaming Avalability API
+const SA_url = `https://streaming-availability.p.rapidapi.com/get?output_language=en`;
+
+// Options for making API requests to (SA)
+const SA_options = {
+  method: 'GET',
+  headers: {
+    //'X-RapidAPI-Key': '9d900f40famshab4ec5577e22c8bp15bb35jsn4815264ed7b7', // Brandon's key
+    'X-RapidAPI-Key': 'e517718793mshc32498728a54ef2p1d6902jsn24ec7261a3d8', // Jared's key
+    // 'X-RapidAPI-Key': '0368508b97msh09a48829a6827d0p1ea4b9jsn4b2d070dbc10', // Jorlyna's key
+    'X-RapidAPI-Host': 'streaming-availability.p.rapidapi.com',
+  },
+};
+
+//===============================================================================
+//=============================== Admin Tools ==================================
+//===============================================================================
+
+// Function: Clear Watchlist
+/**
+ * Clears the watchlist data when the user presses Ctrl + C.
+ * This is an admin tool.
+ */
+$(document).keydown(function (event) {
+  if (event.ctrlKey && event.key === 'c') {
+    // Remove the 'WatchList' item from local storage.
+    localStorage.removeItem('WatchList');
+
+    // Display an alert to indicate that the data has been cleared.
+    alert('ADMIN: Movies Cleared From Local Storage');
+  }
+});
+
+//===============================================================================
+//================================= Functions ===================================
+//===============================================================================
 /**
  * Fetches data from a specified API endpoint with customizable options and returns it as a JSON object.
  *
@@ -72,6 +127,7 @@ function SetData(item, data) {
 //=============================================================================================================
 /**
  * Selects the most frequent items from an array and breaks ties randomly.
+ *
  * @param {Array} array - The input array containing items.
  * @param {number} count - The number of most frequent items to select.
  * @returns {Array} - An array containing the selected most frequent items.
@@ -107,7 +163,13 @@ function GetMostFrequent(array, count) {
 
   return returnItems.map((item) => item.item);
 }
-
+//=============================================================================================================
+/**
+ * Sorts an array of strings based on their character reletivity to an input string.
+ *
+ * @param {Array} array - The input array containing strings to be sorted.
+ * @param {string} input - The reference input string for sorting.
+ */
 function SortArrayByReletivity(array, input) {
   for (const item of array) {
     let weight = 0;

@@ -1,20 +1,8 @@
 //===============================================================================
-//================================= Variables ===================================
+//============================= Homepage Variables =============================
 //===============================================================================
-//Remove Debug Messages
-const utilities_Logs = false;
 
-//OMBD Key if we decide to use it
-const OMBD_Key = 'eee9ecb3';
-
-//TMDB Variables for queries
-const TMDB_key = '337061be9657573ece2ab40bc5cb0965';
-const TMDB_url = 'https://api.themoviedb.org/3';
-const TMDB_movieEndpoint = '/search/movie';
-const TMDB_actorEndpoint = '/search/person';
-const TMDB_discoverEndpoint = '/discover/movie';
-const TMDB_multiSearchEndpoint = '/search/multi';
-
+// List of movie IDs for the homepage carousel.
 let carouselMovieList = [
   '926393',
   '872585',
@@ -45,42 +33,44 @@ let carouselMovieList = [
   '299534',
   '489',
 ];
-let splide;
-let search = '';
-splideCount = -1;
 
-//Temporary inputs for testing
-let library = ['293660', '238', '13', '278', '118340']; // Temp Library
-let ourInput = 'the last airbender'; // Temp Input
+let splide; // Splide slider instance.
+let splideCount = -1; // Counter for Splide carousel items (Initilize -1).
 
-//Our options used for fetching data from APIS
-const ourOptions = {
-  method: 'GET',
-  cache: 'reload',
-};
+let search = ''; // Search Input Field.
 
 //===============================================================================
 //=============================== Running Logic =================================
 //===============================================================================
 
-//Run when the document is done loading
+// Run when the document is fully loaded.
 $(document).ready(function () {
-  //WHEN search field is updated Update Search drop down
-  console.log('Document Ready!');
-  $('#search-input').on('input', UpdateSearch);
+  // Intilize page by loading the carousel on the page.
   LoadCarousel();
+
+  // Attach Event Listeners.
+  $('#search-input').on('input', UpdateSearch);
   $(`#autoFillDiv`).on('click', LoadMoviePage);
+
+  // When the window is about to unload (e.g., when navigating away from the page), clear the search input field.
+  $(window).on('beforeunload', function () {
+    $('#search-input').val('');
+  });
 });
-$(window).on('beforeunload', function () {
-  $('#search-input').val('');
-});
+
 //===============================================================================
 //================================= Functions ===================================
 //===============================================================================
 
+// Function: Scale Splide
+/**
+ *  Adjust the number of visible slides in the Splide carousel based on the screen width.
+ */
 function ScaleSplide() {
+  // Get Window Width.
   let width = $(window).width();
 
+  // Change Count based on Width.
   let newcount = 5;
   if (width > 1500) {
     newcount = 5;
@@ -93,28 +83,39 @@ function ScaleSplide() {
   } else {
     newcount = 1;
   }
+
+  //Create New Splide if Splide Count Changes.
   if (newcount != splideCount) {
     splideCount = newcount;
-    initilizeSplide(splideCount);
+    InitilizeSplide(splideCount);
   }
 }
-//This function handles loading the carousel when the home page loads
-function LoadCarousel() {
-  const shuffledArray = carouselMovieList.slice().sort(() => Math.random() - 0.5);
 
-  const posterUrl = `https://image.tmdb.org/t/p/original`;
+// Function: Load Carousel
+/**
+ *  Loads and populates the homepage carousel with movie posters.
+ */
+function LoadCarousel() {
+  // Shuffle the movie list before displaying.
+  const shuffledArray = carouselMovieList.slice().sort(() => Math.random() - 0.5);
 
   for (let i = 0; i < shuffledArray.length; i++) {
     const movie = shuffledArray[i];
     let movieUrl = `${TMDB_url}/movie/${movie}?api_key=${TMDB_key}`;
+
+    // Fetch Movie Data from TMDB API.
     GetApiJson(movieUrl, ourOptions).then((jsonData) => {
-      $(`.${movie}`).attr('src', `${posterUrl}${jsonData.poster_path}`);
-      $(`.${movie}`).attr('data-backdrop', `${posterUrl}${jsonData.backdrop_path}`);
+      // Set Poster adn backdrop images for the movies.
+      $(`.${movie}`).attr('src', `${TMDB_posterUrl}${jsonData.poster_path}`);
+      $(`.${movie}`).attr('data-backdrop', `${TMDB_posterUrl}${jsonData.backdrop_path}`);
+
+      // Once all movie data is loaded, adjust the Splide Carousel to Initilize.
       if (i == shuffledArray.length - 1) {
         ScaleSplide();
       }
     });
 
+    // Create HTML elements for each movie in the carousel.
     let movieDiv = $('<li></li>', {
       class: 'splide__slide',
     });
@@ -125,60 +126,84 @@ function LoadCarousel() {
       href: `./pages/movie.html?ref=${movie}`,
     });
 
+    // Set default image for movies to override later
     let movieImg = $('<img>', {
       src: `./assets/images/stock-poster.png`,
       class: ` h-80 m-1 cursor-pointer border-2 border-white rounded-2xl ${movie}`,
     });
+
+    // Assemble the HTML structure for each movie.
     movieDiv.append(movieHolder);
     movieHolder.append(movieA);
     movieA.append(movieImg);
 
+    // Append the movie element to the carousel list.
     $('#carouselMovieList').append(movieDiv);
   }
 }
-//This function queries the database and sorts the results based on relativity
-//Input users search
+
+// Function: Update Search
+/**
+ *  Queries the Database based on user input and adds a buffer to inputs.
+ *
+ * @param {event} e - The input event object.
+ */
 function UpdateSearch(e) {
   var thisSearch = $(this).val();
   search = thisSearch;
+
+  //Delay the search action by 50 milliseconds to allow user input to stabalize.
   setTimeout(function () {
     if (search == thisSearch) {
+      //Update the search results.
       SearchBuffer();
     }
   }, 50);
 }
 
+// Function: Search Buffer
+/**
+ * Initiates a database query and updates the dropdown.
+ */
 function SearchBuffer() {
   QueryResults(search).then((result) => {
-    // console.log(result);
+    // Update the search dropdown with the results showing up to 5 items.
     UpdateDropdown(result.results, 5, search);
   });
 }
 
-//This function takes the array of movie results and displays them under the movie search bar
-//Input array of movie results and number of results to display
+// Function: Update Dropdown
+/**
+ * Updates the search dropdown with movie results.
+ *
+ * @param {array} Results - An array of movie results to display.
+ * @param {number} ResultsToDisplay - The number of results to display.
+ * @param {string} input - The user's search input for highlighting.
+ */
 function UpdateDropdown(Results, ResultsToDisplay, input) {
-  //backdrop_path can access the image backdrop
-  const posterUrl = `https://image.tmdb.org/t/p/original/`;
+  // Clear all existing dropdown items.
   $('#autoFillDiv').empty();
+
   for (let i = 0; i < ResultsToDisplay; i++) {
     if (i >= Results.length) {
-      return;
+      return; // Return if Results exceed out Results to Display
     }
 
-    let poster = `${posterUrl}${Results[i].poster_path}`;
+    // Get the poster image URL
+    let poster = `${TMDB_posterUrl}${Results[i].poster_path}`;
     if (Results[i].poster_path == null) {
       poster = `./assets/images/stock-poster.png`;
       console.log(poster);
     }
 
+    // Create a dropdown item with movie information.
     let dropdownItem = $('<div></div>', {
       class: 'dropdownItem bg-white border rounded autoFill p-1 text-gray-600 text-xl',
       id: Results[i].id,
     })
       .append(
         $('<img>', {
-          src: poster, //TODO Null Check
+          src: poster,
           alt: '',
           // height: '100px',
           class: 'h-12 inline',
@@ -200,59 +225,90 @@ function UpdateDropdown(Results, ResultsToDisplay, input) {
         })
       );
 
+    // Append the dropdown item to the dropdown list
     $('#autoFillDiv').append(dropdownItem);
   }
 }
 
-//This function hightlights the text in the dropdown menu based on your input
+// Function: Highlight Input
+/**
+ * Highlights text in the dropdown menu based on user input.
+ *
+ * @param {string} text - The text to be highlighted.
+ * @param {string} input - The user's search input.
+ * @returns {string} - The text with highlighted matches.
+ */
 function HighlightInput(text, input) {
-  console.log(input);
-  // Use a regular expression to find all occurrences of the substring in the main string
+  // Use a regular expression to find all occurrences of the input in the text
   const regex = new RegExp(input, 'gi');
 
-  // Replace all occurrences of the substring with the wrapped version
+  // Wrap all occurrences of the input in a highlight span.
   const highlightedString = text.replace(regex, `<span class="highlight">$&</span>`);
 
   return highlightedString;
 }
 
-//This function queries the database for search results based on passed input
-//Input users search
-//returns an array of relative results
+// Function: Query Results
+/**
+ * Queries the database for search results based on user input.
+ *
+ * @param {string} input - The user's search input.
+ * @returns {Promise<object>} - A promise that resolves to an object with search results.
+ * @throws {Error} - Throws an error if there's an issue with the request.
+ */
 async function QueryResults(input) {
-  let url = `${TMDB_url}${TMDB_movieEndpoint}?api_key=${TMDB_key}&query=${input}`;
+  // Construct the URL for database query.
+  let URL = `${TMDB_url}${TMDB_movieEndpoint}?api_key=${TMDB_key}&query=${input}`;
   try {
-    const jsonData = await GetApiJson(url, ourOptions);
+    // Fetch and parse data from the database using the URL.
+    const jsonData = await GetApiJson(URL, ourOptions);
+
+    //Return the data as search results.
     return jsonData;
   } catch (error) {
-    // Handle errors here, such as network issues or invalid input
+    // Handle errors here, such as network issues or invalid input.
     console.error('Error:', error);
+
+    //Throw the error for higher-level handling.
     throw error;
   }
 }
 
-//This function is used to get our recommendations
-//Input How many movies we want to get
-//returns a random array of movieData
+// Function: Load Movie Page
+/**
+ * Loads a movie page based on users selection and changes to movie page.
+ *
+ * @param {event} e - The event object triggered by the user's selection.
+ */
 function LoadMoviePage(e) {
-  console.log($(e.target));
   let item = $(e.target);
+
+  //Handle clicking children.
   if (!$(e.target).hasClass('dropdownItem')) {
     item = $(e.target).closest('.dropdownItem');
   }
-  console.log(item.attr('id'));
+
+  //Change Page based on ID of the target.
   ChangePage('movie', item.attr('id'));
 }
 
-//This function is used to change the page
-//Input page you want to go to and page refereance if we are going to the movie page else ref can be ""
+// Function: Change Page
+/**
+ * Changes the current web page to the specified page and, if applicable, passes a reference.
+ *
+ * @param {string} page - The page to navigate to ('movie' or 'library').
+ * @param {string} ref - An optional reference value for the 'movie' page. Use an empty string for other pages.
+ */
 function ChangePage(page, ref) {
+  // Get the current page's URL and remove the last part (e.g., http://listyflix.com/homepage > http://listyflix.com).
   let oldLocation = window.location.pathname.split('/');
   oldLocation.pop();
   let newLocation;
 
+  // Determain the new URL based on the specified page.
   switch (page) {
     case 'movie': {
+      // If navigating to the movie page, inclide the 'ref' parameter in the URL.
       newLocation = `${oldLocation.join('/')}/pages/movie.html?ref=${ref}`;
       break;
     }
@@ -261,16 +317,25 @@ function ChangePage(page, ref) {
       break;
     }
   }
+
+  //Change the current page to the new URL.
   window.location.href = newLocation;
 }
 
-function initilizeSplide(count) {
-  console.log('Splide');
+// Function: Initialize Splide
+/**
+ * Initializes the Splide carousel with the specified slide count and configuration.
+ *
+ * @param {number} count - The number of slides to display in the carousel.
+ */
+function InitilizeSplide(count) {
+  // Destroy the previous Splide instance if it exists.
   if (splide) {
     splide.options.perPage = splideCount;
     splide.destroy(true);
   }
 
+  // Create a new Splide instance with the specified configuration.
   splide = new Splide('.splide', {
     type: 'loop',
     perPage: count,
@@ -278,27 +343,36 @@ function initilizeSplide(count) {
     wheel: true,
     wheelSleep: '100',
     keyboard: true,
-    autoplay: true, // Enable autoplay
+    autoplay: true,
     autoplayOptions: {
       start: 'center',
       pauseOnHover: false,
       waitForTransition: true,
     },
-    autoplaySpeed: 2000, // Adjust the autoplay speed (in milliseconds)
+    autoplaySpeed: 2000,
   });
+
   splide.mount();
   UpdateSlideBackground();
+
+  // Update splide background when the carousel is moved.
   splide.on('moved', function () {
     UpdateSlideBackground();
   });
+
+  //Scale the carousel when the window is resized.
   $(window).on('resize', ScaleSplide);
 }
 
+// Function: Update Slide Background
+/**
+ * Updates the background image of the carousel based on the current slide.
+ */
 function UpdateSlideBackground() {
   let currentSlideIndex = splide.index;
   let currentSlideElement = splide.Components.Elements.slides[currentSlideIndex];
 
-  //TODO On Moved put backdrop on background
+  // Set the background image source based on the current slide.
   $('#backdrop').attr('src', `${$(currentSlideElement).find('img').data('backdrop')}`);
 }
 
