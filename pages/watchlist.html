@@ -1,48 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!---------------------------------- Tailwind CSS 2.2.16 ---------------------------------->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet" />
-    <!------------------------------------- Custom CSS ---------------------------------------->
-    <link rel="stylesheet" href="../assets/css/style.css" />
-    <title>My Watchlist - ListyFlix</title>
-  </head>
-
-  <body class="min-h-screen">
-    <!-------------------------------------- Header ------------------------------------------->
-    <header class="w-full py-4 px-10">
-      <a href="../index.html" class="inline-block">
-        <img src="../assets/images/Logo.png" alt="" class="h-10" />
-      </a>
-      <a href="./watchlist.html" class="lib float-right text-2xl">Watchlist</a>
-    </header>
-    <!-------------------------------------- Main --------------------------------------------->
-    <main class="min-h-screen bg-gradiant">
-      <div class="md:w-3/4 w-5/6 mx-auto pt-10">
-        <div class="flex flex-wrap border p-5 bg-primary-dark justify-center rounded-lg" id="watchlist">
-          <p class="m-48 text-secondary text-xl">No movies added to your watchlist yet</p>
-        </div>
-        <div class="mt-10 bg-dark border rounded-lg">
-          <p class="text-white text-2xl text-center my-1">Our picks for you:</p>
-          <div class="flex flex-wrap p-5 justify-center" id="recommended">
-
-          </div>
+<!---------------------------------------- Head -------------------------------------------->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!---------------------------------- Tailwind CSS 2.2.16 ---------------------------------->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet" />
+  <!------------------------------------- Custom CSS ---------------------------------------->
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <title>My Watchlist - ListyFlix</title>
+</head>
+<!---------------------------------------- Body --------------------------------------------->
+<body class="min-h-screen">
+  <!-------------------------------------- Header ------------------------------------------->
+  <header class="w-full py-4 px-10">
+    <a href="../index.html" class="inline-block text-4xl bold lib inline-block">Home</a>
+    <a href="./watchlist.html" class="lib float-right text-2xl">Watchlist</a>
+  </header>
+  <!-------------------------------------- Main --------------------------------------------->
+  <main class="min-h-screen bg-gradiant">
+    <div class="md:w-3/4 w-5/6 mx-auto pt-10">
+      <!----------------------------- Users watchlist --------------------------------------->
+      <div class="flex flex-wrap border p-5 bg-primary-dark justify-center rounded-lg" id="watchlist">
+        <p class="m-48 text-secondary text-xl">No movies added to your watchlist yet</p>
+      </div>
+      <!------------------------- Recommendations for user ---------------------------------->
+      <div class="mt-10 bg-dark border rounded-lg">
+        <p class="text-white text-2xl text-center my-1">Our picks for you:</p>
+        <div class="flex flex-wrap p-5 justify-center" id="recommended">
         </div>
       </div>
-    </main>
-    <!------------------------------------- Footer -------------------------------------------->
-    <footer></footer>
-    <!------------------------------------- Jquery 3.7.1 -------------------------------------->
-    <script
-      src="https://code.jquery.com/jquery-3.7.1.min.js"
-      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-      crossorigin="anonymous"></script>
-    <!------------------------------------- DayJS 1.10.6 -------------------------------------->
-    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.6/dayjs.min.js"></script>
-    <!------------------------------------ Custom Script -------------------------------------->
-    <script src="../assets/js/utilities.js"></script>
-    <script src="../assets/js/watchlistScript.js"></script>
-  </body>
+    </div>
+  </main>
+  <!------------------------------------- Jquery 3.7.1 -------------------------------------->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <!------------------------------------ Custom Script -------------------------------------->
+  <script src="../assets/js/utilities.js"></script>
+  <script src="../assets/js/watchlistScript.js"></script>
+</body>
+
 </html>
