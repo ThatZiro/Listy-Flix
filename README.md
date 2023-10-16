@@ -38,7 +38,7 @@
     <li><a href="#tech-stack">Tech Stack</a></li>
     <li><a href="#sneak-peek">Sneak Peek</a></li>
     <li><a href="#development">Development</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <li><a href="#team">Team</a></li>
   </ol>
 </details>
 
@@ -81,7 +81,7 @@
 
 ## Team - CtrlAltDefeat
 
-<a name="contact"></a>
+<a name="team"></a>
 
 ### Jorlyna<span style="font-size: 12px"> - Designer</span>
 
