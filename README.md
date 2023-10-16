@@ -89,7 +89,7 @@
 <p>Github - <a href="https://github.com/jorlyna326">jorlyna326</a></p>
 <hr>
 
-### Jarod <span style="font-size: 12px">- Front End Developer</span>
+### Jared <span style="font-size: 12px">- Front End Developer</span>
 
 <p>Email - <a href="mailto:jmorrison.m44@gmail.com">jmorrison.m44@gmail.com</a></p>
 <p>Github - <a href="https://github.com/jradmorrison">jradmorrison</a></p>
