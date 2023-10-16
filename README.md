@@ -89,13 +89,13 @@
 <p>Github - <a href="https://github.com/jorlyna326">jorlyna326</a></p>
 <hr>
 
-### Jared <span style="font-size: 12px">- Front End Developer</span>
+### Jared <span style="font-size: 12px">- Page layout and styling</span>
 
 <p>Email - <a href="mailto:jmorrison.m44@gmail.com">jmorrison.m44@gmail.com</a></p>
 <p>Github - <a href="https://github.com/jradmorrison">jradmorrison</a></p>
 <hr>
 
-### Brandon <span style="font-size: 12px">- Back End Developer</span>
+### Brandon <span style="font-size: 12px">- JavaScript functionality</span>
 
 <p>Email - <a href="mailto:ImBrandonBarnes@gmail.com">imbrandonbarnes@gmail.com</a></p>
 <p>Github - <a href="https://github.com/ThatZiro">ThatZiro</a></p>
