@@ -1,81 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-<!---------------------------------------- Head -------------------------------------------->
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!---------------------------------- Tailwind CSS 2.2.16 ---------------------------------->
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet" />
-  <!------------------------------------- Custom CSS ---------------------------------------->
-  <link rel="stylesheet" href="../assets/css/style.css" />
-  <title>My Watchlist - ListyFlix</title>
-</head>
-<!---------------------------------------- Body --------------------------------------------->
-<body class="min-h-screen target-bg">
-  <!-------------------------------------- Header ------------------------------------------->
-  <header class="w-full py-4 px-10">
-    <a href="../index.html" class="inline-block text-4xl bold lib inline-block">Home</a>
-    <a href="../pages/watchlist.html" class="lib float-right text-2xl">Watchlist</a>
-  </header>
-  <!-------------------------------------- Main --------------------------------------------->
-  <main>
-    <div class="flex sm:flex-row flex-col min-w-screen p-10">
-      <div class="sm:w-1/4 w-1/2 mx-auto">
-        <!---------------------------- Movie poster ----------------------------------------->
-        <img src="../assets/images/stock-poster.png" alt="" class="rounded-lg border mb-8" id="poster">
-      </div>
-      <div class="sm:w-3/4 w-full relative">
-        <!-------------------- Certification, Title, rating --------------------------------->
-        <div class="flex flex-wrap text-white items-center ml-6">
-          <div class="xl:text-4xl md:text-2xl text-xl border p-1" id="certification"></div>
-          <p class="xl:text-6xl md:text-4xl text-2xl border-b ml-6" id="title"></p>
-          <p class="xl:text-4xl md:text-2xl text-xl ml-6 italic" id="rating"></p>
+  <!---------------------------------------- Head -------------------------------------------->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!---------------------------------- Tailwind CSS 2.2.16 ---------------------------------->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet" />
+    <!------------------------------------- Custom CSS ---------------------------------------->
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <title>My Watchlist - ListyFlix</title>
+    <link rel="icon" href="./assets/images/Icon.png" />
+  </head>
+  <!---------------------------------------- Body --------------------------------------------->
+  <body class="min-h-screen target-bg">
+    <!-------------------------------------- Header ------------------------------------------->
+    <header class="w-full py-4 px-10">
+      <a href="../index.html" class="inline-block text-4xl bold lib inline-block">Home</a>
+      <a href="../pages/watchlist.html" class="lib float-right text-2xl">Watchlist</a>
+    </header>
+    <!-------------------------------------- Main --------------------------------------------->
+    <main>
+      <div class="flex sm:flex-row flex-col min-w-screen p-10">
+        <div class="sm:w-1/4 w-1/2 mx-auto">
+          <!---------------------------- Movie poster ----------------------------------------->
+          <img src="../assets/images/stock-poster.png" alt="" class="rounded-lg border mb-8" id="poster" />
         </div>
-        <!-------------------- Release data and Runtime ------------------------------------->
-        <div class="flex flex-wrap text-white items-center my-4 ml-6">
-          <p class="xl:text-2xl md:text-xl" id="release-date"></p>
-          <p class="xl:text-2xl md:text-xl ml-6" id="runtime"></p>
-        </div>
-        <!------------------------------- Genres -------------------------------------------->
-        <div class="flex text-white items-center ml-6" id="genre">
-          <div class="xl:text-xl md:text-lg bg-opacity px-4 py-1 rounded-full"></div>
-          <div class="xl:text-xl md:text-lg bg-opacity px-4 py-1 rounded-full ml-4"></div>
-          <div class="xl:text-xl md:text-lg bg-opacity px-4 py-1 rounded-full ml-4"></div>
-        </div>
-        <!------------------------------ tag line -------------------------------------------->
-        <div class="ml-6 text-white italic my-4 xl:text-2xl md:text-xl" id='tagline'></div>
-        <!------------------------------ Overview -------------------------------------------->
-        <div class="ml-6 text-white w-2/3">
-          <p class="font-bold xl:text-2xl md:text-xl">Overview:</p>
-          <p class="xl:text-xl md:text-lg my-1" id="overview"></p>
-        </div>
-        <!-------------------------------- cast ---------------------------------------------->
-        <div class="ml-6 text-white mt-10 xl:text-2xl md:text-xl w-2/3" id="cast">
-          <p></p>
-          <p></p>
-        </div>
-        <div class="ml-6 mt-10">
-          <!------------------ Add/Remove to/from watchlist ---------------------------------->
-          <button
-            class="text-white xl:text-2xl md:text-xl py-1 px-4 bg-primary opacity-75 hover:opacity-100 rounded-full h-10"
-            id="addWatchlist">
-          </button>
-        </div>
-        <!----------------------- Streaming availability -------------------------------------->
-        <div class="ml-6 mt-6">
-          <p class="text-white text-2xl">Available to stream here:</p>
-          <div class="flex flex-wrap content-center" id="stream">
+        <div class="sm:w-3/4 w-full relative">
+          <!-------------------- Certification, Title, rating --------------------------------->
+          <div class="flex flex-wrap text-white items-center ml-6">
+            <div class="xl:text-4xl md:text-2xl text-xl border p-1" id="certification"></div>
+            <p class="xl:text-6xl md:text-4xl text-2xl border-b ml-6" id="title"></p>
+            <p class="xl:text-4xl md:text-2xl text-xl ml-6 italic" id="rating"></p>
+          </div>
+          <!-------------------- Release data and Runtime ------------------------------------->
+          <div class="flex flex-wrap text-white items-center my-4 ml-6">
+            <p class="xl:text-2xl md:text-xl" id="release-date"></p>
+            <p class="xl:text-2xl md:text-xl ml-6" id="runtime"></p>
+          </div>
+          <!------------------------------- Genres -------------------------------------------->
+          <div class="flex text-white items-center ml-6" id="genre">
+            <div class="xl:text-xl md:text-lg bg-opacity px-4 py-1 rounded-full"></div>
+            <div class="xl:text-xl md:text-lg bg-opacity px-4 py-1 rounded-full ml-4"></div>
+            <div class="xl:text-xl md:text-lg bg-opacity px-4 py-1 rounded-full ml-4"></div>
+          </div>
+          <!------------------------------ tag line -------------------------------------------->
+          <div class="ml-6 text-white italic my-4 xl:text-2xl md:text-xl" id="tagline"></div>
+          <!------------------------------ Overview -------------------------------------------->
+          <div class="ml-6 text-white w-2/3">
+            <p class="font-bold xl:text-2xl md:text-xl">Overview:</p>
+            <p class="xl:text-xl md:text-lg my-1" id="overview"></p>
+          </div>
+          <!-------------------------------- cast ---------------------------------------------->
+          <div class="ml-6 text-white mt-10 xl:text-2xl md:text-xl w-2/3" id="cast">
+            <p></p>
+            <p></p>
+          </div>
+          <div class="ml-6 mt-10">
+            <!------------------ Add/Remove to/from watchlist ---------------------------------->
+            <button
+              class="text-white xl:text-2xl md:text-xl py-1 px-4 bg-primary opacity-75 hover:opacity-100 rounded-full h-10"
+              id="addWatchlist"></button>
+          </div>
+          <!----------------------- Streaming availability -------------------------------------->
+          <div class="ml-6 mt-6">
+            <p class="text-white text-2xl">Available to stream here:</p>
+            <div class="flex flex-wrap content-center" id="stream"></div>
           </div>
         </div>
       </div>
-    </div>
-  </main>
-  <!------------------------------------- Jquery 3.7.1 -------------------------------------->
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-  <!------------------------------------ Custom Script -------------------------------------->
-  <script src="../assets/js/utilities.js"></script>
-  <script src="../assets/js/moiveScript.js"></script>
-</body>
-
+    </main>
+    <!------------------------------------- Jquery 3.7.1 -------------------------------------->
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"></script>
+    <!------------------------------------ Custom Script -------------------------------------->
+    <script src="../assets/js/utilities.js"></script>
+    <script src="../assets/js/moiveScript.js"></script>
+  </body>
 </html>
