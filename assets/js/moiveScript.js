@@ -1,50 +1,34 @@
 //===============================================================================
-//================================= Variables ===================================
+//============================= Moviepage Variables =============================
 //===============================================================================
-//Remove Debug Messages
-const utilities_Logs = false;
 
-//Disable stream avalability api calls
-const toggleStreamAvalability = true;
-
-//TMDB Variables for queries
-const TMDB_key = '337061be9657573ece2ab40bc5cb0965';
-const TMDB_url = 'https://api.themoviedb.org/3';
-const TMDB_movieEndpoint = '/search/movie';
-const TMDB_actorEndpoint = '/search/person';
-const TMDB_discoverEndpoint = '/discover/movie';
-const TMDB_multiSearchEndpoint = '/search/multi';
-
-//Our options used for fetching data from APIS
-const ourOptions = {
-  method: 'GET',
-  cache: 'reload',
-};
-
-let id = '';
+let id = ''; // ID for movie page.
 
 //===============================================================================
 //=============================== Running Logic =================================
 //===============================================================================
 
-//Run when the document is done loading
+// Run when the document is fully loaded.
 $(document).ready(function () {
+  // Initialize the page by setting the movie ID.
   SetID();
+
+  // Load the selected movie on the page.
   LoadMoviePage();
+
+  // Attach Event Listeners.
   $('#addWatchlist').on('click', AddMovieToWatchlist);
   $(`#autoFillDiv`).on('click', LoadMoviePage);
-
-  //Temp Data Clear
-  $(document).keydown(function (event) {
-    if (event.ctrlKey && event.key === 'c') {
-      ClearWatchlist();
-    }
-  });
 });
 
 //===============================================================================
 //================================= Functions ===================================
 //===============================================================================
+
+// Function: Set ID
+/**
+ * Extracts the ID from the URL and stores it in the 'id' variable.
+ */
 function SetID() {
   let url = window.location.href;
   args = url.split('?');
@@ -52,37 +36,42 @@ function SetID() {
   id = ref[1];
 }
 
+// Function: Load Movie Page
+/**
+ * Loads and populates the movie page with details from TMDB API.
+ */
 function LoadMoviePage() {
-  const posterUrl = `https://image.tmdb.org/t/p/original/`;
-
+  // Construct the URL for fetching movie data from TMDB.
   let movieUrl = `${TMDB_url}/movie/${id}?api_key=${TMDB_key}`;
 
   return GetApiJson(movieUrl, ourOptions).then((jsonData) => {
-    //Handle Certification
+    // Handle Getting Certification
     GetCertification()
       .then((certification) => {
+        // Update certification information on the page.
         $('#certification').text(certification.certification);
       })
       .catch((error) => {
         console.error('Error:', error);
       });
-    //${posterUrl}${jsonData.backdrop_path}
 
-    //${posterUrl}${jsonData.poster_path}
-    $('#poster').attr('src', `${posterUrl}${jsonData.poster_path}`);
+    // Update the poster image and background image on the page.
+    $('#poster').attr('src', `${TMDB_posterUrl}${jsonData.poster_path}`);
     $('.target-bg').css({
-      background: `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6)),url(${posterUrl}${jsonData.backdrop_path})`,
+      background: `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6)),url(${TMDB_posterUrl}${jsonData.backdrop_path})`,
       'background-position': 'center',
       'background-size': 'cover',
     });
 
+    // Update movie title, release date, overview, rating, runtime, and tagline.
     $('#title').text(jsonData.title);
-
     $('#release-date').text(`Released: ${jsonData.release_date}`);
-
+    $('#overview').text(jsonData.overview);
     $('#rating').text(`${Number(jsonData.vote_average.toFixed(1))}/10 - ${jsonData.vote_count} votes`);
-
     $('#runtime').text(`${jsonData.runtime} mins`);
+    $('#tagline').text(jsonData.tagline);
+
+    // Update genre information on the page.
     let genreDisplay = $('#genre').children();
     for (let i = 0; i < genreDisplay.length; i++) {
       if (i < jsonData.genres.length) {
@@ -93,10 +82,7 @@ function LoadMoviePage() {
       }
     }
 
-    $('#tagline').text(jsonData.tagline);
-
-    $('#overview').text(jsonData.overview);
-    //Handle Certification
+    //Update featuring actors and directors on the page.
     GetCredits()
       .then((credits) => {
         let featuringEl = $('#cast').children().eq(1);
@@ -113,6 +99,7 @@ function LoadMoviePage() {
         console.error('Error:', error);
       });
 
+    //Check if the movie is in the watchlist and toggle the watchlist button.
     movies = GetData('WatchList');
     if (movies == null) {
       movies = [];
@@ -124,12 +111,18 @@ function LoadMoviePage() {
       WatchlistButtonToggle(true);
     }
 
+    // Display Streaming availability if applicable.
     if (toggleStreamAvalability) {
       DisplayStreamingAvalabilty();
     }
   });
 }
 
+// Function: Watchlist Button Toggle
+/**
+ * Toggle the text of the watchlist button based on the provided status.
+ * @param {boolean} status - True to display "Add to Watchlist," false to display "Remove from Watchlist."
+ */
 function WatchlistButtonToggle(status) {
   if (status) {
     $('#addWatchlist').text('+ To Watchlist');
@@ -138,52 +131,79 @@ function WatchlistButtonToggle(status) {
   }
 }
 
-//This function is used to get most recent movie certification from another fetch call
-//Input Movie ID
-//returns String containing most recent rating
+// Function: Get Certification
+/**
+ * Fetches the most recent movie certification for a given movie ID from TMDB.
+ * @param {number} id - The movie ID for which to retrieve certification.
+ * @returns {string} - A string containing the most recent rating or 'N/A' if not available.
+ */
 async function GetCertification() {
+  // Construct the URL for fetching certification data.
   let certificationUrl = `${TMDB_url}/movie/${id}/release_dates?api_key=${TMDB_key}`;
-  // let url = `https://api.themoviedb.org/3/movie/335984/release_dates?api_key=337061be9657573ece2ab40bc5cb0965`;
 
   try {
+    // Fetch certification data from TMDB.
     const certificationData = await GetApiJson(certificationUrl, ourOptions);
+
+    // Find the US certification data among the results.
     const usCertification = await certificationData.results.find((result) => result.iso_3166_1 === 'US');
 
     if (usCertification && usCertification.release_dates.length > 0) {
+      // Get the latest certification entry from the list.
       const latestCertification = usCertification.release_dates[usCertification.release_dates.length - 1];
       return latestCertification;
     } else {
+      // Return 'N/A' if no certification data is avalible for the US.
       return `N/A`;
     }
   } catch (error) {
+    // Handle and log any errors that occur during the fetch.
     console.error('Error fetching certification data:', error);
     throw error;
   }
 }
 
+// Function: Get Credits
+/**
+ * Fetches credits data for a given movie ID from the TMDB API.
+ * @returns {object} - An object containing cast and crew credits information.
+ */
 async function GetCredits() {
+  // Construct URL for fetching credits
   let creditUrl = `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${TMDB_key}`;
   try {
+    // Fetch credits from TMDB.
     const creditData = await GetApiJson(creditUrl, ourOptions);
     return creditData;
   } catch (error) {
+    // Handle and log any errors that occur during the fetch.
     console.error('Error fetching certification data:', error);
     throw error;
   }
 }
 
+// Function: Add Movie To Watchlist
+/**
+ * Adds or removes a movie from the watchlist.
+ * @param {event} e - The event object triggered by the user's action.
+ */
 function AddMovieToWatchlist(e) {
+  // Retrive the current watchlist data from local storage.
   let watchlist = GetData('WatchList');
+
+  // If the watchlist data is null, set watchlist to an empty array.
   if (watchlist == null) {
     watchlist = [];
   }
 
+  // Check if movie already exists in watchlist and remove it if found.
   for (let i = 0; i < watchlist.length; i++) {
     if (watchlist[i] === id) {
       watchlist.splice(i, 1);
     }
   }
 
+  // Toggle the watchlist button and add or remove the movie ID accordingly.
   if ($(this).text() == '- From Watchlist') {
     WatchlistButtonToggle(true);
   } else {
@@ -192,31 +212,26 @@ function AddMovieToWatchlist(e) {
     watchlist.unshift(id);
   }
 
+  //Update the watchlist data in local storage.
   SetData('WatchList', watchlist);
 }
 
-function ClearWatchlist() {
-  localStorage.removeItem('WatchList');
-  alert('ADMIN : Movies Cleared From Local Storage');
-}
-
+// Function: Display Streaming Availability
+/**
+ * Fetches and displays streaming availability information for the current movie.
+ * @returns {Promise<void>} - A Promise that resolves once the data is fetched and displayed.
+ */
 async function DisplayStreamingAvalabilty() {
-  //Fetch Data from API using input
-  const SA_url = `https://streaming-availability.p.rapidapi.com/get?output_language=en`;
+  // Construct the URL for (SA).
   const url = `${SA_url}&tmdb_id=movie/${id}`;
-  const SA_options = {
-    method: 'GET',
-    headers: {
-      //'X-RapidAPI-Key': '9d900f40famshab4ec5577e22c8bp15bb35jsn4815264ed7b7', // Brandon's key
-      'X-RapidAPI-Key': 'e517718793mshc32498728a54ef2p1d6902jsn24ec7261a3d8', // Jared's key
-      // 'X-RapidAPI-Key': '0368508b97msh09a48829a6827d0p1ea4b9jsn4b2d070dbc10', // Jorlyna's key
-      'X-RapidAPI-Host': 'streaming-availability.p.rapidapi.com',
-    },
-  };
-  // console.log(url);
+
+  // Initilize an empty array to store streaming information.
   let streamingInfo = [];
+
+  // Fetch streaming avalability data from (SA).
   let streamingData = await GetApiJson(url, SA_options);
 
+  // Check if streaming data is avalable and extract US streaming info.
   if (!streamingData) {
     streamingData = [];
   } else {
@@ -225,12 +240,10 @@ async function DisplayStreamingAvalabilty() {
     }
   }
 
-  console.log(streamingData);
-  // console.log(streamingData.result.streamingInfo.us);
-
   let found = [];
   let sortedInfo = [];
-  console.log(streamingInfo);
+
+  // Filter and sort streaming information
   for (const info of streamingInfo) {
     if (info.streamingType == 'subscription' && !found.includes(info.service)) {
       found.push(info.service);
@@ -243,10 +256,8 @@ async function DisplayStreamingAvalabilty() {
       sortedInfo.push(info);
     }
   }
-  console.log(sortedInfo);
 
-  //Sort Data to limit results? Maybe only include the popular providers (Netflix, hulu, prime, apple etc)
-  //For Each Service
+  // Display the streaming information
   if (sortedInfo.length > 0) {
     for (const service of sortedInfo) {
       $('#stream').append(
@@ -257,6 +268,7 @@ async function DisplayStreamingAvalabilty() {
         })
       );
 
+      // Display the streaming service's logo.
       console.log(streamingServices.services[service.service].images.darkThemeImage);
       $(`#${service.service}`).append(
         $('<img>', {
@@ -266,6 +278,7 @@ async function DisplayStreamingAvalabilty() {
       );
     }
   } else {
+    // Display a message when the movie is not avalible for streaming.
     $('#stream').append(
       $(`<p></p>`, {
         text: 'Not avalible to stream',
@@ -273,13 +286,13 @@ async function DisplayStreamingAvalabilty() {
       })
     );
   }
-
-  // --Display Service in Streamhere Div as Ancor and Image
-  //If No StreamServices are avalible display "Not available to stream" message
 }
+
 //===============================================================================
-//================================= Stream Data =================================
+//================================= Streaming Data ==============================
 //===============================================================================
+
+// Stores data and images for various streaming services.
 const streamingServices = {
   countryCode: 'us',
   name: 'United States',
